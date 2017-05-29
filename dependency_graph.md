@@ -5,13 +5,13 @@ To minimise the amount of code maintenance, many pact implementations depend on 
 This graph shows the dependency relationships to assist in updating the libraries.
 
 
-[pact-support gem][pact-support-gem] \
-  <- [pact-mock_service gem][pact-mock-service-gem] \
-    <- [pact-mock_service standalone packages][pact-mock-service-standalone] \
-    <- [pact gem][pact-gem] \
-    <- [pact-mock-service-npm][pact-mock-service-npm] \
-      <- [pact-node][pact-node] \
-        <- pact-js \
+* [pact-support gem][pact-support-gem]
+    * [pact-mock_service gem][pact-mock-service-gem]
+        * [pact-mock_service standalone packages][pact-mock-service-standalone]
+            * [pact-mock-service-npm][pact-mock-service-npm]
+                * [pact-node][pact-node]
+                *  pact-js
+    * [pact gem][pact-gem]
 
   <- pact gem \
     <- pact-provider-verifier-docker \
