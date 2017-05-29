@@ -10,19 +10,15 @@ This graph shows the dependency relationships to assist in updating the librarie
         * [pact-mock_service standalone packages][pact-mock-service-standalone]
             * [pact-mock-service-npm][pact-mock-service-npm]
                 * [pact-node][pact-node]
-                *  pact-js
+                    * [pact-js][pact-js]
     * [pact gem][pact-gem]
-
-  <- pact gem \
-    <- pact-provider-verifier-docker \
-    <- pact-provider-verifier gem \
-    <- pact-provider-verifier standalone packages \
-      <- pact-node \
-        <- pact-js \
-
-    <- pact_broker gem \
-      <- pact_broker-docker \
-      <- pact-broker-docker-private \
+        * [pact-provider-verifier gem][pact-provider-verifier-gem]
+                * [pact-provider-verifier standalone packages][pact-provider-verifier-standalone]
+                    * [pact-node][pact-node]
+                * [pact-node][pact-node]
+                    *  [pact-js][pact-js]
+        * [pact_broker gem][pact-broker-gem]
+            * [pact_broker-docker][pact_broker-docker]
 
 
 [pact-support-gem]: https://github.com/pact-foundation/pact-support/blob/master/RELEASING.md
@@ -30,4 +26,10 @@ This graph shows the dependency relationships to assist in updating the librarie
 [pact-mock-service-standalone]: https://github.com/pact-foundation/pact-mock_service/blob/master/packaging/README.md
 [pact-gem]: https://github.com/realestate-com-au/pact/blob/master/RELEASING.md
 [pact-mock-service-npm]: https://github.com/pact-foundation/pact-mock-service-npm/blob/master/RELEASING.md
-[pact-node]: https://github.com/pact-foundation/pact-node
+[pact-node]: https://github.com/pact-foundation/pact-node/blob/master/RELEASING.md
+[pact-js]: https://github.com/pact-foundation/pact-js/blob/master/RELEASING.md
+[pact-provider-verifier-gem]: https://github.com/pact-foundation/pact-provider-verifier/blob/master/RELEASING.md
+[pact-provider-verifier-standalone]: https://github.com/pact-foundation/pact-provider-verifier/blob/master/RELEASING.md
+[pact-provider-verifier-docker]: https://github.com/DiUS/pact-provider-verifier-docker/blob/master/RELEASING.md
+[pact-broker-gem]: https://github.com/pact-foundation/pact_broker/blob/master/RELEASING.md
+[pact_broker-docker]: https://github.com/DiUS/pact_broker-docker/blob/master/RELEASING.md
