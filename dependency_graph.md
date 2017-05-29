@@ -1,4 +1,4 @@
-# Dependency graph
+# The Pact Dependency Graph of Doom
 
 To minimise the amount of code maintenance, many pact implementations depend on some shared libraries. When the shared libraries are updated, it is important to update the packages that use them.
 
