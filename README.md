@@ -12,5 +12,6 @@ The fact that Pact works across so many different languages these day is due to 
 * [Pact Broker Docker](https://github.com/DiUS/pact_broker-docker)
 * [Pact Consumer Swift](https://github.com/DiUS/pact-consumer-swift)
 * [Pact provider verifier docker](https://github.com/DiUS/pact-provider-verifier-docker)
+* [Pact Swagger mock validator](https://bitbucket.org/atlassian/swagger-mock-validator)
 
 [pactio]: http://pact.io
