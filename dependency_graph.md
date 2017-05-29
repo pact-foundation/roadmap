@@ -16,6 +16,7 @@ This graph shows the dependency relationships to assist in updating the librarie
             * [pact-provider-verifier standalone packages][pact-provider-verifier-standalone]
                 * [pact-node][pact-node]
                     *  [pact-js][pact-js]
+            * [pact-provider-verifier-docker][pact-provider-verifier-docker]
         * [pact_broker gem][pact-broker-gem]
             * [pact_broker-docker][pact_broker-docker]
 
