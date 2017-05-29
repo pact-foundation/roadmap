@@ -11,11 +11,13 @@ This graph shows the dependency relationships to assist in updating the librarie
             * [pact-mock-service-npm][pact-mock-service-npm]
                 * [pact-node][pact-node]
                     * [pact-js][pact-js]
+            * [pact-python][pact-python]
     * [pact gem][pact-gem]
         * [pact-provider-verifier gem][pact-provider-verifier-gem]
             * [pact-provider-verifier standalone packages][pact-provider-verifier-standalone]
                 * [pact-node][pact-node]
                     *  [pact-js][pact-js]
+            * [pact-python][pact-python]                    
             * [pact-provider-verifier-docker][pact-provider-verifier-docker]
         * [pact_broker gem][pact-broker-gem]
             * [pact_broker-docker][pact_broker-docker]
@@ -33,3 +35,4 @@ This graph shows the dependency relationships to assist in updating the librarie
 [pact-provider-verifier-docker]: https://github.com/DiUS/pact-provider-verifier-docker/blob/master/RELEASING.md
 [pact-broker-gem]: https://github.com/pact-foundation/pact_broker/blob/master/RELEASING.md
 [pact_broker-docker]: https://github.com/DiUS/pact_broker-docker/blob/master/RELEASING.md
+[pact-python]: https://github.com/pact-foundation/pact-python/blob/master/RELEASING.md
