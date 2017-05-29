@@ -1,6 +1,6 @@
 # Pact Foundation README
 
-This repository contains technical information about the pact source code
+This repository contains technical information about the pact source code and builds. Go to [pact.io][pactio] for user documentation.
 
 ## External pact repositories
 
@@ -12,3 +12,5 @@ The fact that Pact works across so many different languages these day is due to 
 * [Pact Broker Docker](https://github.com/DiUS/pact_broker-docker)
 * [Pact Consumer Swift](https://github.com/DiUS/pact-consumer-swift)
 * [Pact provider verifier docker](https://github.com/DiUS/pact-provider-verifier-docker)
+
+[pactio]: http://pact.io
