@@ -9,6 +9,7 @@ This graph shows the dependency relationships to assist in updating the librarie
     * [pact-mock_service gem][pact-mock-service-gem]
         * [pact ruby standalone packages][pact-ruby-standalone]
             * [pact-python][pact-python]
+        * [pact-mock-service-docker][pact-mock-service-docker]
         * [pact-mock_service standalone packages][pact-mock-service-standalone]
             * [pact-mock-service-npm][pact-mock-service-npm]
                 * [pact-node][pact-node]
@@ -36,7 +37,9 @@ This graph shows the dependency relationships to assist in updating the librarie
 [pact-provider-verifier-gem]: https://github.com/pact-foundation/pact-provider-verifier/blob/master/RELEASING.md
 [pact-provider-verifier-standalone]: https://github.com/pact-foundation/pact-provider-verifier/blob/master/RELEASING.md
 [pact-provider-verifier-docker]: https://github.com/DiUS/pact-provider-verifier-docker/blob/master/RELEASING.md
+[pact-mock-service-docker]: https://github.com/pact-foundation/pact-mock-service-docker/blob/master/RELEASING.md
 [pact-broker-gem]: https://github.com/pact-foundation/pact_broker/blob/master/RELEASING.md
 [pact_broker-docker]: https://github.com/DiUS/pact_broker-docker/blob/master/RELEASING.md
 [pact-python]: https://github.com/pact-foundation/pact-python/blob/master/RELEASING.md
-[pact-ruby-standalone]: https://github.com/pact-foundation/pact-ruby-standalong/blob/master/RELEASING.md
+[pact-ruby-standalone]: https://github.com/pact-foundation/pact-ruby-standalone/blob/master/RELEASING.md
+
