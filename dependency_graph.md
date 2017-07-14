@@ -14,6 +14,7 @@ This graph shows the dependency relationships to assist in updating the librarie
             * [pact-mock-service-npm][pact-mock-service-npm]
                 * [pact-node][pact-node]
                     * [pact-js][pact-js]         
+            * [pact-go][pact-go]
     * [pact gem][pact-gem]
         * [pact ruby standalone packages][pact-ruby-standalone]
             * [pact-python][pact-python]
@@ -23,6 +24,7 @@ This graph shows the dependency relationships to assist in updating the librarie
                     *  [pact-js][pact-js]
             * [pact-python][pact-python]                    
             * [pact-provider-verifier-docker][pact-provider-verifier-docker]
+            * [pact-go][pact-go]            
         * [pact_broker gem][pact-broker-gem]
             * [pact_broker-docker][pact_broker-docker]
 
@@ -42,4 +44,4 @@ This graph shows the dependency relationships to assist in updating the librarie
 [pact_broker-docker]: https://github.com/DiUS/pact_broker-docker/blob/master/RELEASING.md
 [pact-python]: https://github.com/pact-foundation/pact-python/blob/master/RELEASING.md
 [pact-ruby-standalone]: https://github.com/pact-foundation/pact-ruby-standalone/blob/master/RELEASING.md
-
+[pact-go]: https://github.com/pact-foundation/pact-go/blob/master/RELEASING.md
