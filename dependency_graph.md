@@ -4,23 +4,24 @@ To minimise the amount of code maintenance, many pact implementations depend on 
 
 This graph shows the dependency relationships to assist in updating the libraries.
 
+The `standalone packages` provide the Ruby Pact code bundled along with the Ruby interpreter so that it can be installed and run on a machine without Ruby. There is a package built for each operating system. The `pact ruby standalone package` is a (newer) amalgamation of `pact-mock_service standalone package` and `pact-provider-verifier standalone package`, and should be used in preference to the separate ones as it shares the Ruby interpreter code and hence is a smaller total file size.
 
 * [pact-support gem][pact-support-gem]
     * [pact-mock_service gem][pact-mock-service-gem]
-        * [pact ruby standalone packages][pact-ruby-standalone]
+        * [pact ruby standalone package][pact-ruby-standalone]
             * [pact-python][pact-python]
             * [pact-net][pact-net]            
         * [pact-mock-service-docker][pact-mock-service-docker]
-        * [pact-mock_service standalone packages][pact-mock-service-standalone]
+        * [pact-mock_service standalone package][pact-mock-service-standalone]
             * [pact-mock-service-npm][pact-mock-service-npm]
                 * [pact-node][pact-node]
                     * [pact-js][pact-js]         
             * [pact-go][pact-go]
     * [pact gem][pact-gem]
-        * [pact ruby standalone packages][pact-ruby-standalone]
+        * [pact ruby standalone package][pact-ruby-standalone]
             * [pact-python][pact-python]
         * [pact-provider-verifier gem][pact-provider-verifier-gem]
-            * [pact-provider-verifier standalone packages][pact-provider-verifier-standalone]
+            * [pact-provider-verifier standalone package][pact-provider-verifier-standalone]
                 * [pact-node][pact-node]
                     *  [pact-js][pact-js]
             * [pact-python][pact-python]                    
