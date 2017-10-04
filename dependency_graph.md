@@ -46,5 +46,6 @@ The `standalone packages` provide the Ruby Pact code bundled along with the Ruby
 [pact_broker-docker]: https://github.com/DiUS/pact_broker-docker/blob/master/RELEASING.md
 [pact-python]: https://github.com/pact-foundation/pact-python/blob/master/RELEASING.md
 [pact-ruby-standalone]: https://github.com/pact-foundation/pact-ruby-standalone/blob/master/RELEASING.md
+[pact-standalone-npm]: https://github.com/pact-foundation/pact-standalone-npm/blob/master/RELEASING.md
 [pact-go]: https://github.com/pact-foundation/pact-go/blob/master/RELEASING.md
 [pact-net]: https://github.com/SEEK-Jobs/pact-net
