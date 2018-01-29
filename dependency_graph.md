@@ -34,7 +34,7 @@ The `standalone packages` provide the Ruby Pact code bundled along with the Ruby
 [pact-support-gem]: https://github.com/pact-foundation/pact-support/blob/master/RELEASING.md
 [pact-mock-service-gem]: https://github.com/pact-foundation/pact-mock_service/blob/master/RELEASING.md
 [pact-mock-service-standalone]: https://github.com/pact-foundation/pact-mock_service/blob/master/packaging/README.md
-[pact-gem]: https://github.com/realestate-com-au/pact/blob/master/RELEASING.md
+[pact-gem]: https://github.com/pact-foundation/pact-support/blob/master/RELEASING.md
 [pact-mock-service-npm]: https://github.com/pact-foundation/pact-mock-service-npm/blob/master/RELEASING.md
 [pact-node]: https://github.com/pact-foundation/pact-node/blob/master/RELEASING.md
 [pact-js]: https://github.com/pact-foundation/pact-js/blob/master/RELEASING.md
@@ -48,4 +48,4 @@ The `standalone packages` provide the Ruby Pact code bundled along with the Ruby
 [pact-ruby-standalone]: https://github.com/pact-foundation/pact-ruby-standalone/blob/master/RELEASING.md
 [pact-standalone-npm]: https://github.com/pact-foundation/pact-standalone-npm/blob/master/RELEASING.md
 [pact-go]: https://github.com/pact-foundation/pact-go/blob/master/RELEASING.md
-[pact-net]: https://github.com/SEEK-Jobs/pact-net
+[pact-net]: https://github.com/pact-foundation/pact-net
