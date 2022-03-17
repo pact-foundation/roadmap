@@ -4,7 +4,7 @@
 |-------------|------------------------------------------------------------------------------------|
 | Pact Broker |
 |             | [Github](https://github.com/pact-foundation/pact_broker)                           |
-|             | [Travis CI](https://travis-ci.org/pact-foundation/pact_broker)                     |
+|             | [Github Actions](https://github.com/pact-foundation/pact_broker/actions)                     |
 |             | [Docker](https://hub.docker.com/repository/docker/pactfoundation/pact-broker)      |
 | Pact CLI |
 |             | [Github](https://github.com/pact-foundation/pact-ruby-cli)                         |
@@ -14,7 +14,7 @@
 |             | [E2E example](https://github.com/pact-foundation/pact-ruby-standalone-e2e-example) |
 | Pact JS     |
 |             | [Github](https://github.com/pact-foundation/pact-js)                               |
-|             | [Mesage docs](https://github.com/pact-foundation/pact-js#asynchronous-api-testing) |
+|             | [Message docs](https://github.com/pact-foundation/pact-js#asynchronous-api-testing) |
 | Roadmap     |
 |             | [Canny](https://pact.canny.io)                                                     |
 | Docs        |
