@@ -1,0 +1,59 @@
+name: Check for New Interactions and Add to Orbit
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+env:
+  ORBIT_API_KEY: ${{ secrets.ORBIT_API_KEY}}
+  ORBIT_WORKSPACE_ID: ${{ secrets.ORBIT_WORKSPACE_ID}}
+
+jobs:
+  product_hunt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npx @orbit-love/producthunt --votes --comments --id 163152
+        name: 'Get Pactflow Votes & Add to Orbit'
+        env:
+          PRODUCT_HUNT_API_KEY: ${{ secrets.PRODUCT_HUNT_API_KEY}}
+          PRODUCT_HUNT_API_SECRET: ${{ secrets.PRODUCT_HUNT_API_SECRET}}
+
+  stack_overflow:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag:
+          - pact
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Get Questions & Add to Orbit
+        run: npx @orbit-love/stackoverflow --questions --hours=24 --tag="${{matrix.tag}}"
+      - name: Get Answers & Add to Orbit
+        run: npx @orbit-love/stackoverflow --answers --hours=24 --tag="${{matrix.tag}}"
+      - name: Get Answered Questions & Add to Orbit
+        run: npx @orbit-love/stackoverflow --questions --answers --hours=24 --tag="${{matrix.tag}}"
+    env:
+        STACK_APPS_KEY: ${{ secrets.STACK_APPS_KEY }}
+
+  youtube:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Get Comments & Add to Orbit
+        run: npx @orbit-love/youtube --comments --hours=24
+    env:
+        YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        YOUTUBE_CHANNEL_ID: ${{ secrets.YOUTUBE_CHANNEL_ID }}
