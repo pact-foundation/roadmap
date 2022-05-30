@@ -1,4 +1,6 @@
-# Developer Relations @ Pact - Evangelism / Enablement / Advocacy / Community
+# Developer Relations @ Pact
+
+> Evangelism / Enablement / Advocacy / Community
 
 Good communities are places where people :heart: to be.
 
