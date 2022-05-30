@@ -104,7 +104,6 @@ So why Orbit? I'll let them explain in their own [words](https://orbit.love/blog
 
 The fact that Pact works across so many different languages these day is due to the contribution of many different people and companies. To acknowledge the support that many companies have made to Pact's open source code, some repositories still live under the github organisation of their original author. They are listed below.
 
-- [Python Pact Broker Client](https://github.com/Babylonpartners/pact-broker-client)
 - [Pact Broker Docker](https://github.com/DiUS/pact_broker-docker)
 - [Pact Consumer Swift](https://github.com/DiUS/pact-consumer-swift)
 - [Pact provider verifier docker](https://github.com/DiUS/pact-provider-verifier-docker)
