@@ -8,13 +8,10 @@ The `pact ruby standalone` provides the Ruby Pact code bundled along with the Ru
 
 * [pact-support gem][pact-support-gem]
     * [pact-mock_service gem][pact-mock-service-gem]
-        * [pact ruby standalone package][pact-ruby-standalone]
-        * [pact-mock-service-docker][pact-mock-service-docker]
         * [pact-ruby-standalone][pact-ruby-standalone]
     * [pact gem][pact-gem]
-        * [pact ruby standalone package][pact-ruby-standalone]
+        * [pact-ruby-standalone][pact-ruby-standalone]
         * [pact-provider-verifier gem][pact-provider-verifier-gem]
-
         * [pact-cli-docker][pact-cli-docker]
 
 * [pact ruby standalone package][pact-ruby-standalone]
