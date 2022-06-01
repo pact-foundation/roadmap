@@ -41,3 +41,4 @@ The `pact ruby standalone` provides the Ruby Pact code bundled along with the Ru
 [pact-net]: https://github.com/pact-foundation/pact-net
 [pact-cli-docker]: https://github.com/pact-foundation/pact-ruby-cli
 [pact-consumer-swift]: https://github.com/DiUS/pact-consumer-swift
+[pact-php]: https://github.com/pact-foundation/pact-php
