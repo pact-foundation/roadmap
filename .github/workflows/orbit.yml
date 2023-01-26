@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '14'
       - run: npx @orbit-love/producthunt --votes --comments --id 163152
-        name: 'Get Pactflow Votes & Add to Orbit'
+        name: 'Get PactFlow Votes & Add to Orbit'
         env:
           PRODUCT_HUNT_API_KEY: ${{ secrets.PRODUCT_HUNT_API_KEY}}
           PRODUCT_HUNT_API_SECRET: ${{ secrets.PRODUCT_HUNT_API_SECRET}}
