@@ -13,6 +13,7 @@ Let me make the Pact landscape a little easier to navigate
 - [Developer Relations @ Pact - Evangelism / Enablement / Advocacy / Community](#developer-relations--pact---evangelism--enablement--advocacy--community)
   - [Links](#links)
   - [Get involved!](#get-involved)
+    - [🫂 Maintainer Sessions](#-maintainer-sessions)
     - [📙 Docs](#-docs)
     - [🚀 Code](#-code)
     - [Roadmap / Feature Requests](#roadmap--feature-requests)
@@ -43,6 +44,17 @@ Let me make the Pact landscape a little easier to navigate
 The Pact ecosystem is vast, I will be sharing some posts over the upcoming months, showing the size of the estate, and looking to gain insight from you, the community, as to how we can reduce the signal-to-noise and help reduce the cognitive load required to navigate the path the Pact Nirvana in your own organisation.
 
 There are a multitude of ways, and you don't need to be a code wizard to start:
+
+### 🫂 Maintainer Sessions
+
+We catch up every week with alternating times for the sessions, to aid with syncing with Europe / Austrailian members
+
+- 9am-9:45am UTC
+- 9pm-9:45pm UTC
+
+You can download a calender invite from this repository, see [Pact Community Meeting.ics](https://github.com/pact-foundation/devrel/blob/master/Pact%20Community%20Meeting.ics)
+
+A google document holds our [agenda](https://docs.google.com/document/d/1v_QWyYEl7rxR5hV0EQAcTFjBbiq5_uzn7_WMMYILRac/edit?usp=sharing) which is openly editable and where anyone can table ideas for discussion.
 
 ### 📙 Docs
 
