@@ -10,8 +10,8 @@ RRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=WE
 DTEND:20231108T214500Z
 SUMMARY:Pact Community Meeting (Australia AM)
 URL:https://smartbear.zoom.us/j/96124075972
-DESCRIPTION:Agenda<https://docs.google.com/document/d/1v_QWyYEl7rxR5hV0EQAcTFjBbiq5_uzn7_WMMYILRac/edit?usp=sharing> for an openly editable agenda where anyone can table ideas for discussion.
-LOCATION:https://pact-foundation.slack.com/archives/C05HCLA3C93
+DESCRIPTION:Agenda https://docs.google.com/document/d/1v_QWyYEl7rxR5hV0EQAcTFjBbiq5_uzn7_WMMYILRac/edit?usp=sharing for an openly editable agenda where anyone can table ideas for discussion. Maintainers Slack Channel https://pact-foundation.slack.com/archives/C05HCLA3C93
+LOCATION:https://smartbear.zoom.us/j/96124075972
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Pact Community Meeting (Australia AM)
@@ -26,8 +26,8 @@ RRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=WE
 DTEND:20231115T094500Z
 SUMMARY:Pact Community Meeting (Europe AM)
 URL:https://smartbear.zoom.us/j/96124075972
-DESCRIPTION:Agenda<https://docs.google.com/document/d/1v_QWyYEl7rxR5hV0EQAcTFjBbiq5_uzn7_WMMYILRac/edit?usp=sharing> for an openly editable agenda where anyone can table ideas for discussion.
-LOCATION:https://pact-foundation.slack.com/archives/C05HCLA3C93
+DESCRIPTION:Agenda https://docs.google.com/document/d/1v_QWyYEl7rxR5hV0EQAcTFjBbiq5_uzn7_WMMYILRac/edit?usp=sharing for an openly editable agenda where anyone can table ideas for discussion. Maintainers Slack Channel https://pact-foundation.slack.com/archives/C05HCLA3C93
+LOCATION:https://smartbear.zoom.us/j/96124075972
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Pact Community Meeting (Europe AM)
