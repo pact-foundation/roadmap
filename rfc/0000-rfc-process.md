@@ -17,15 +17,16 @@ While the evolution of Pact and its ecosystem is open, the process for proposing
 
 The Pact ecosystem is broad and includes, broadly speaking, the following areas:
 
-- The Pact specification itself,
-- The Pact broker,
-- The Pact CLI,
-- The Pact FFI,
-- The Pact implementation in various languages,
+- The Pact specification itself ([pact-foundation/pact-specification](https://github.com/pact-foundation/pact-specification))
+- The Pact broker ([pact-foundation/pact-broker](pact-foundation/pact_broker))
+- The Pact CLI ([pact-foundation/pact-ruby-cli](https://github.com/pact-foundation/pact-ruby-cli))
+- The Pact FFI ([pact-foundation/pact-reference](https://github.com/pact-foundation/pact-reference/tree/master/rust/pact_ffi)).
 
-This RFC process is intended to cover any change which will impact the broader Pact ecosystem and therefore includes the first four areas listed above.
+This RFC process is intended to cover any change which will impact the broader Pact ecosystem.
 
-While specific changes to the Pact implementation in various languages are out of scope, we do wish to consider how changes in the first four areas will impact the implementation in various languages. Furthermore, we may wish to introduce or formalize common conventions or guidelines that are applied across the various languages to ensure consistency, interoperability, and familiarity for users.
+While specific changes to the Pact implementation in various languages are generally out of scope[^1], we do wish to consider how changes in the areas above will impact the implementation in various languages. Furthermore, we may wish to introduce or formalize common conventions or guidelines that are applied across the various languages to ensure consistency, interoperability, and familiarity for users.
+
+[^1]: Changes to the Pact implementation in various languages are out of scope because they are managed by the maintainers of the individual language implementations (which may even have their own RFC process).
 
 ### The Process
 
