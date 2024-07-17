@@ -2,6 +2,7 @@
 name: (fill me in with a unique ident, `my_awesome_feature`)
 started: (fill me in with today's date, YYYY-MM-DD)
 pr: pact-foundation/roadmap#0000
+tracking_issue: pact-foundation/roadmap#0000
 ---
 <!--
 The following is a template to help you write your RFC. You don't have to strictly follow this template, but it should help you to consider the various aspects of your proposal. If you have any questions, feel free to ask in the PR or in the Pact Slack community.

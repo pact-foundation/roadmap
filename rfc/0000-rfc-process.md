@@ -40,8 +40,9 @@ The RFC process is intended to remain flexible while still ensuring that changes
 
 Eventually, a member of the Pact Foundation will either reject the RFC by closing the PR, or accept it by merging the PR. If the RFC is accepted, the following steps will also be taken:
 
-1. Assign an RFC number based on the PR number, and update the filename and metadata.
-2. Create a tracking issue in the Pact Foundation Roadmap repository for the implementation of the RFC. Where applicable, other issues may be created in other repositories.
+1. Creating a tracking issue in the Pact Foundation Roadmap repository for the implementation of the RFC.
+2. Assign an RFC number based on the PR number, and update the filename and metadata (including link to the tracking issue to implementation).
+3. Where applicable, other issues may be created in other repositories, with the tracking issue linking to these issues.
 
 ## Drawbacks
 
