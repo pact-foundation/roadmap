@@ -3,35 +3,14 @@ VERSION:2.0
 PRODID:-//ical.marudot.com//iCal Event Maker
 CALSCALE:GREGORIAN
 BEGIN:VEVENT
-DTSTAMP:20231108T161819Z
-UID:1698849484953-10460@ical.marudot.com
-DTSTART:20231108T210000Z
-RRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=WE
-DTEND:20231108T214500Z
-SUMMARY:Pact Community Meeting (Australia AM)
-URL:https://smartbear.zoom.us/j/96124075972
-DESCRIPTION:Agenda https://docs.google.com/document/d/1v_QWyYEl7rxR5hV0EQAcTFjBbiq5_uzn7_WMMYILRac/edit?usp=sharing for an openly editable agenda where anyone can table ideas for discussion. Maintainers Slack Channel https://pact-foundation.slack.com/archives/C05HCLA3C93
-LOCATION:https://smartbear.zoom.us/j/96124075972
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Pact Community Meeting (Australia AM)
-TRIGGER:-PT30M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-DTSTAMP:20231108T161819Z
+DTSTAMP:20240725T195125Z
 UID:1698849495314-60951@ical.marudot.com
-DTSTART:20231115T090000Z
+DTSTART:20231115T100000Z
 RRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=WE
-DTEND:20231115T094500Z
-SUMMARY:Pact Community Meeting (Europe AM)
+DTEND:20231115T104500Z
+SUMMARY:Pact Community Meeting
 URL:https://smartbear.zoom.us/j/96124075972
 DESCRIPTION:Agenda https://docs.google.com/document/d/1v_QWyYEl7rxR5hV0EQAcTFjBbiq5_uzn7_WMMYILRac/edit?usp=sharing for an openly editable agenda where anyone can table ideas for discussion. Maintainers Slack Channel https://pact-foundation.slack.com/archives/C05HCLA3C93
 LOCATION:https://smartbear.zoom.us/j/96124075972
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Pact Community Meeting (Europe AM)
-TRIGGER:-PT30M
-END:VALARM
 END:VEVENT
 END:VCALENDAR
