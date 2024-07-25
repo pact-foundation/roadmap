@@ -1,0 +1,56 @@
+name: 🏗️ Tracking Issue
+description: A tracking issue to monitor the implementation of an approved RFC.
+labels: [tracking]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is a tracking issue for an approved RFC. It is expected that the issue will be updated as the implementation progresses.
+
+        Typically, the implementation will require changes across a number of other repositories within the Pact ecosystem. This issue should link to all of these related issues.
+
+        GitHub can automatically monitor the implementation of related issues by using the following markdown:
+
+        ```markdown
+        - [ ] pact-foundation/{repository}#{issue_number}
+        ```
+
+  - type: input
+    attributes:
+      label: RFC
+      description: The RFC number that this issue is tracking.
+      placeholder: "#123"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Summary
+      description: |
+        The high-level summary of the feature being implemented. This should be copied from the approved RFC's summary.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Implementation Plan
+      description: |
+        A plan of how the feature will be implemented. This may vary significantly for different RFCs, but should include a high-level overview of the changes required.
+
+        This plan may be updated as the implementation progresses.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Related Issues
+      description: |
+        A list of related issues that need to be implemented to complete this RFC. These issues should be linked to this tracking issue.
+
+        GitHub can automatically monitor the implementation of related issues by using the following markdown:
+
+        ```markdown
+        - [ ] pact-foundation/{repository}#{issue_number}
+        ```
+
+        You will need to create these issues in the relevant repositories.
