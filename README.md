@@ -47,10 +47,9 @@ There are a multitude of ways, and you don't need to be a code wizard to start:
 
 ### 🫂 Maintainer Sessions
 
-We catch up every week with alternating times for the sessions, to aid with syncing with Europe / Austrailian members
+We catch once every two weeks.
 
-- 9am-9:45am UTC
-- 9pm-9:45pm UTC
+- 10am-10:45am UTC (11am GMT / 8pm AEST)
 
 You can download a calender invite from this repository, see [Pact Community Meeting.ics](https://github.com/pact-foundation/devrel/blob/master/Pact%20Community%20Meeting.ics)
 
