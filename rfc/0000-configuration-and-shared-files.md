@@ -131,6 +131,7 @@ To ensure a consistent experience across the Pact ecosystem, the following confi
 
   Location:
 
+  - On all systems, if the configuration file is explicitly set (either by `PACT_CONFIG_FILE` or a command line option), this location _must_ be used.
   - Unix and Unix-like systems:
     - `$XDG_CONFIG_HOME/pact/config.toml` (which defaults to `~/.config/pact/config.toml` if `XDG_CONFIG_HOME` is not set)
   - Windows:
