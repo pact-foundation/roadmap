@@ -222,6 +222,21 @@ The following tables are proposed:
   enable_other_feature = false
   ```
 
+#### Path Handling
+
+To ensure a uniform experience across the Pact ecosystem and operating systems, the following rules _must_ be followed when handling paths in the configuration file:
+
+- Paths _must_ be stored using the forward slash (`/`) as the path separator.
+  - This avoids the need to escape backslashes (`\`) in Windows paths.
+  - If a backslash is used, it is undefined behaviour. The implementation _may_ attempt to convert the backslashes to forward slashes, or may use the value as-is.
+- The tilde (`~`) character _must_ be expanded to the user's home directory if it is the first character in a path.
+  - For example, parsing `~/.local/share/pact` should result in `/home/user/.local/share/pact` on Unix-like systems.
+  - If the tilde appears elsewhere in the path, it is treated as a literal character.
+  - If someone wishes to use a literal tilde for a relative path, they _must_ use `./~` instead.
+- Relative paths are allowed, and _must_ be resolved relative to the configuration file.
+  - For example, if the configuration file is located at `/workdir/project/.pact.toml`, and a value is set to `.pact/data`, the resolved path should be `/workdir/project/.pact/data`.
+
+
 ### Shared Files
 
 At present, there are only a few files which are shared across the Pact ecosystem. These are:
