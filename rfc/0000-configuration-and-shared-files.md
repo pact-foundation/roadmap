@@ -145,7 +145,7 @@ To ensure a consistent experience across the Pact ecosystem, the following confi
 
   If the operating system cannot be detected, the fallback location _should_ be used.
 
-  If the operating system is detected and the configuration file is found in the fallback location, a warning _should_ be displayed informing the user to relocate the configuration.
+  If the operating system is detected and the configuration file is found in the fallback location, a warning _should_ be displayed informing the user to relocate the configuration. The exception to this is if the location of the config file is explicitly set, in which case the warning _must not_ be displayed.
 
   If an end user has multiple user configuration files, it is undefined behaviour.
 
@@ -242,12 +242,24 @@ As with the configuration files, a standard location is proposed for shared file
 
 If the operating system cannot be detected, the fallback location _should_ be used.
 
-If the operating system is detected and the fallback location is found, a warning _should_ be displayed to inform the user to relocate the directory.
+If the operating system is detected and the fallback location is found, a warning _should_ be displayed to inform the user to relocate the directory. This exception to this is if the location of the shared files is explicitly set, in which case the warning _must not_ be displayed.
 
 ## Drawbacks
 
 - This RFC may be seen as too prescriptive, and may not be flexible enough for some use cases. Hopefully enough flexibility has been built in to cater for most use cases, but it is possible that some edge cases may not be covered.
 - There is an existing de-facto standard to use `~/.pact/`. This RFC proposes a backwards compatible way to ensure that users can migrate to the new standard without breaking existing setups, but this will unfortunately require some additional work on behalf of the maintainers of the various Pact implementations to ensure that this is handled correctly.
+
+  If an end user wishes to keep using `~/.pact`, they should:
+
+  1. Set `PACT_CONFIG_FILE` to `~/.pact/config.toml`
+  2. Either:
+     1. Set `PACT_DATA_HOME` to `~/.pact/`
+     2. Add the following to `~/.pact/config.toml`:
+
+        ```toml
+        [pact]
+        data_home = "."
+        ```
 
 ## Rationale and alternatives
 
