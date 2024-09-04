@@ -109,13 +109,17 @@ For example:
 
 The following order of precedence _must_ be followed when reading configuration data:
 
-1. Environment variables
-2. Configuration files, in the following order:
+1. CLI arguments (if applicable)
+2. Environment variables
+3. Configuration files, in the following order:
    1. If an explicit configuration file is set, only that file should be read.
-   2. If no explicit configuration file is set, the following files should be read in order:
+   2. If no explicit configuration file is set, the following files should be read:
+
       1. Local configuration file
       2. User configuration file
-3. Default values
+
+      The options are merged, with the local configuration file taking precedence over the user configuration file.
+4. Default values
 
 The explicit configuration file may either be set by the `PACT_CONFIG_FILE` environment variable, or by a command line option.
 
