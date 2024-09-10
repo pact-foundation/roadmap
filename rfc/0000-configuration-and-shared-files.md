@@ -166,6 +166,8 @@ To ensure a consistent experience across the Pact ecosystem, the following confi
 
 The TOML configuration file _must_ be organised into sections (or tables) to group configuration data. Top-level configuration data _must not_ be allowed.
 
+Keys should be in lowercase, and use hyphens (`-`) to separate words. This is to ensure a consistent experience across the Pact ecosystem.
+
 The following tables are proposed:
 
 - `pact`
@@ -174,16 +176,16 @@ The following tables are proposed:
 
   ```toml
   [pact]
-  plugin_dir = "~/.local/share/pact/plugins"
-  data_home = "~/.local/share/pact"
-  do_not_track = true
+  plugin-dir = "~/.local/share/pact/plugins"
+  data-home = "~/.local/share/pact"
+  do-not-track = true
   ```
 
   The following entries are proposed as part of this RFC:
 
-  - `plugin_dir`: The directory where shared plugins are stored. Equivalent to `PACT_PLUGIN_DIR`.
-  - `data_home`: The directory where shared files are stored. Equivalent to `PACT_DATA_HOME`.
-  - `do_not_track`: If set to `true`, the Pact implementation _must not_ report any usage analytics data back to the Pact Foundation.
+  - `plugin-dir`: The directory where shared plugins are stored. Equivalent to `PACT_PLUGIN_DIR`.
+  - `data-home`: The directory where shared files are stored. Equivalent to `PACT_DATA_HOME`.
+  - `do-not-track`: If set to `true`, the Pact implementation _must not_ report any usage analytics data back to the Pact Foundation.
 
 - `broker`
 
@@ -191,17 +193,23 @@ The following tables are proposed:
 
   ```toml
   [broker]
-  base_url = "https://pact-broker.local.company.com:9292"
-  username = "user"
-  password = "password"
+  base-url = "https://pact-broker.local.company.com:9292"
+  auth = { username = "user", password = "password" }
+  # or
+  auth = { token = "token" }
   ```
 
   The following entries are proposed:
 
-  - `base_url`: The base URL of the Pact Broker. Equivalent to `PACT_BROKER_BASE_URL`.
-  - `username`: The username to use when authenticating with the Pact Broker. Equivalent to `PACT_BROKER_USERNAME`.
-  - `password`: The password to use when authenticating with the Pact Broker. Equivalent to `PACT_BROKER_PASSWORD`.
-  - `token`: The token to use when authenticating with the Pact Broker. Equivalent to `PACT_BROKER_TOKEN`.
+  - `base-url`: The base URL of the Pact Broker. Equivalent to `PACT_BROKER_BASE_URL`.
+  - `auth`: The authentication details to use when connecting to the Pact Broker. This is a sub-table with the following entries:
+
+    - `auth.username`: The username to use when authenticating with the Pact Broker. Equivalent to `PACT_BROKER_USERNAME`.
+    - `auth.password`: The password to use when authenticating with the Pact Broker. Equivalent to `PACT_BROKER_PASSWORD`.
+    - `auth.token`: The token to use when authenticating with the Pact Broker. Equivalent to `PACT_BROKER_TOKEN`.
+
+    <!-- comment about how override should treat auth as a block -->
+    Note that the `auth` block should be treated as a single entity. If any of the `auth` fields are set in a high precedence configuration, they should override the entire `auth` block of a lower precedence configuration.
 
   The Pact Broker itself _may_ have additional configuration options within the `broker` table.
 
@@ -219,7 +227,7 @@ The following tables are proposed:
   disabled = true
 
   [pactflow]
-  enable_other_feature = false
+  enable-other-feature = false
   ```
 
 #### Path Handling
@@ -273,7 +281,7 @@ If the operating system is detected and the fallback location is found, a warnin
 
         ```toml
         [pact]
-        data_home = "."
+        data-home = "."
         ```
 
 ## Rationale and alternatives
@@ -283,7 +291,7 @@ If the operating system is detected and the fallback location is found, a warnin
 
 ## Unresolved questions
 
-> [!INFO]
+> [!NOTE]
 >
 > At present, there are no unresolved questions, though I expect that there may be some as this RFC is discussed.
 
