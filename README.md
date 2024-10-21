@@ -103,16 +103,6 @@ This graph shows the dependency relationships to assist in updating the librarie
 
 See the [Dependency Graph of Doom](./dependency_graph.md)
 
-## Measurement
-
-We want to track our GitHub repo usage, health, and cross-correlate with Slack, so we can reach the right people quicker, and ultimately save leaving you hanging.
-
-I'd also love to build some tooling myself, but why reinvent the wheel, there is already plenty of stuff to do in Pact land!
-
-So why Orbit? I'll let them explain in their own [words](https://orbit.love/blog/why-orbit-is-better-than-funnel-for-developer-relations)
-
-![image](https://user-images.githubusercontent.com/19932401/170391529-39cbfa31-8964-475c-b5f6-31c8c806cf78.png)
-
 ## External pact repositories
 
 The fact that Pact works across so many different languages these day is due to the contribution of many different people and companies. To acknowledge the support that many companies have made to Pact's open source code, some repositories still live under the github organisation of their original author. They are listed below.
