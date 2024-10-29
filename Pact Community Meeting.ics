@@ -5,32 +5,12 @@ X-WR-CALNAME:Pact Community Meeting
 NAME:Pact Community Meeting
 REFRESH-INTERVAL;VALUE=DURATION:P1D
 CALSCALE:GREGORIAN
-BEGIN:VTIMEZONE
-TZID:Europe/London
-LAST-MODIFIED:20231222T233358Z
-TZURL:https://www.tzurl.org/zoneinfo-outlook/Europe/London
-X-LIC-LOCATION:Europe/London
-BEGIN:DAYLIGHT
-TZNAME:BST
-TZOFFSETFROM:+0000
-TZOFFSETTO:+0100
-DTSTART:19700329T010000
-RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
-END:DAYLIGHT
-BEGIN:STANDARD
-TZNAME:GMT
-TZOFFSETFROM:+0100
-TZOFFSETTO:+0000
-DTSTART:19701025T020000
-RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
-END:STANDARD
-END:VTIMEZONE
 BEGIN:VEVENT
-DTSTAMP:20240821T141615Z
+DTSTAMP:20241029T001111Z
 UID:1698849495314-60951@ical.marudot.com
-DTSTART;TZID=Europe/London:20240821T110000
+DTSTART:20240821T100000Z
 RRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=WE
-DTEND;TZID=Europe/London:20240821T114500
+DTEND:20240821T104500Z
 SUMMARY:Pact Community Meeting
 URL:https://smartbear.zoom.us/j/96124075972
 DESCRIPTION:Regular catch up for Pact community members. Everyone welcome!\n\nAgenda is freely available and can be edited by anyone to put items on the agenda for discuss (or you can come with suggestions in the meeting).\n\nAgenda link: https://docs.google.com/document/d/1v_QWyYEl7rxR5hV0EQAcTFjBbiq5_uzn7_WMMYILRac/edit?usp=sharing\nSlack Channel: https://pact-foundation.slack.com/archives/C05HCLA3C93
