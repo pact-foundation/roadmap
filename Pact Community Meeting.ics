@@ -1,6 +1,9 @@
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//ical.marudot.com//iCal Event Maker
+X-WR-CALNAME:Pact Community Meeting
+NAME:Pact Community Meeting
+REFRESH-INTERVAL;VALUE=DURATION:P1D
 CALSCALE:GREGORIAN
 BEGIN:VTIMEZONE
 TZID:Europe/London
