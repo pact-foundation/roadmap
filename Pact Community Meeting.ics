@@ -30,7 +30,7 @@ RRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=WE
 DTEND;TZID=Europe/London:20240821T114500
 SUMMARY:Pact Community Meeting
 URL:https://smartbear.zoom.us/j/96124075972
-DESCRIPTION:Agenda https://docs.google.com/document/d/1v_QWyYEl7rxR5hV0EQAcTFjBbiq5_uzn7_WMMYILRac/edit?usp=sharing for an openly editable agenda where anyone can table ideas for discussion. Maintainers Slack Channel https://pact-foundation.slack.com/archives/C05HCLA3C93
+DESCRIPTION:Regular catch up for Pact community members. Everyone welcome!\n\nAgenda is freely available and can be edited by anyone to put items on the agenda for discuss (or you can come with suggestions in the meeting).\n\nAgenda link: https://docs.google.com/document/d/1v_QWyYEl7rxR5hV0EQAcTFjBbiq5_uzn7_WMMYILRac/edit?usp=sharing\nSlack Channel: https://pact-foundation.slack.com/archives/C05HCLA3C93
 LOCATION:https://smartbear.zoom.us/j/96124075972
 BEGIN:VALARM
 ACTION:DISPLAY
