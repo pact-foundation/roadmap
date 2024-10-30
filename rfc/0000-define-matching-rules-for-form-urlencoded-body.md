@@ -54,7 +54,7 @@ After the matching rules are extracted, the example body will be returned:
 number=23.45&string=example+text&array=value1&array=value4
 ```
 
-This example body (along with matchers) will be written into pact file. Generators will be ignored.
+This example body (along with matchers) will be written into pact file.
 
 ### Without matching rules
 
@@ -82,15 +82,25 @@ let raw = "number=123&string=example+value&array=-123.45&array=inner+text";
 pactffi_with_body(interaction, InteractionPart::Request, "application/x-www-form-urlencoded", raw);
 ```
 
+### Generators
+
+Generators will be ignored for now to prevent this error:
+
+```
+Generators only support JSON and XML
+```
+
+They may be supported in future RFCs.
+
 ### Unsupported syntax
 
 These values are not supported:
 
-- Null
-- Boolean (true/false)
-- Object
-- Array of Arrays
-- Array of Objects
+- Null: There is no way to represent null in query string. User may want to define empty string instead.
+- Boolean (true/false): There is no standard way to represent boolean in query string. It can be 1/0, true/false or t/f. User need to define them explicitly.
+- Object: There is no standard way to represent object in query string.
+- Array of Arrays: There is no standard way to represent array of arrays in query string.
+- Array of Objects: There is no standard way to represent array of objects in query string.
 
 
 #### With matching rules:
@@ -205,24 +215,6 @@ Here is the flow we need to implement in Rust core (pact-reference project):
         - Example Form UrlEncoded body
         - Content type: `application/x-www-form-urlencoded`
     - Extracted generators are ignored (can be supported in future RFCs)
-
-### Unsupported syntax explaination
-
-* Null: There is no way to represent null in query string. User may want to define empty string instead.
-* Boolean: There is no standard way to represent boolean in query string. It can be 1/0, true/false or t/f. User need to define them explicitly.
-* Object: There is no standard way to represent object in query string.
-* Array of arrays: There is no standard way to represent array of arrays in query string.
-* Array of objects: There is no standard way to represent array of objects in query string.
-
-### Generators
-
-Generators will be ignored for now to prevent this error:
-
-```
-Generators only support JSON and XML
-```
-
-They may be supported in future RFCs.
 
 ## Drawbacks
 
