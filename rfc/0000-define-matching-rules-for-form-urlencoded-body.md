@@ -149,6 +149,34 @@ pactffi_with_body(interaction, InteractionPart::Request, "application/x-www-form
 
 The values are ignored. Unsupported error messages are logged. The extracted example body will be empty.
 
+### Special cases
+
+- keys with no values (`a=&b=&c=`): can be achieved by define empty string value
+- values with no keys (`=a&=b&=c`): can't be achieved because empty key is not supported and will be ignored
+- repeated keys: (`a=1&a=2` or `a=2&a=1`): can be achieved by define array values
+- special characters
+    - `/`: will be encoded to `%2F`
+    - `&`: will be encoded to `%26`
+    - `?`: will be encoded to `%3F`
+    - `=`: will be encoded to `%3D`
+- only ampersands (`&&&`)
+    - can't be defined by json
+    - can be defined by raw syntax
+    - these query strings can match it:
+        - `&`
+        - `&&`
+        - `&&&`
+        - ...
+    - empty string can't match it
+- only equals signs (`===`)
+    - can't be defined by json
+    - can be defined by raw syntax
+    - these query strings can match it:
+        - `===`
+        - `=%3D%3D`
+    - empty string can't match it
+- no key and value (`=&=&=`): can't be achieved because empty key is not supported and will be ignored
+
 ## Reference-level explanation
 
 Here is the flow we need to implement in Rust core (pact-reference project):
