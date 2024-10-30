@@ -32,9 +32,6 @@ When the RFC is implemented, the example usage would be:
 
 ```rust
 let json = json!({
-    "null": {
-        "pact:matcher:type": "null"
-    },
     "number": {
         "pact:matcher:type": "number",
         "value": 23.45
@@ -57,9 +54,7 @@ After the matching rules are extracted, the example body will be returned:
 number=23.45&string=example+text&array=value1&array=value4
 ```
 
-This example body will be written into pact file, and will be used to send to provider to verify.
-
-> Note: Null will be removed
+This example body (along with matchers) will be written into pact file. Generators will be ignored.
 
 ### Without matching rules
 
@@ -67,7 +62,6 @@ We can also define body without matching rules:
 
 ```rust
 let json = json!({
-    "null": null,
     "number": 123,
     "string": "example value",
     "array": [null, -123.45, "inner text"],
@@ -88,24 +82,11 @@ let raw = "number=123&string=example+value&array=-123.45&array=inner+text";
 pactffi_with_body(interaction, InteractionPart::Request, "application/x-www-form-urlencoded", raw);
 ```
 
-### Null value
-
-Null is simply ignored.
-If null matching rule is defined, it will not do anything.
-If consumer trying to request `null=something+else`, or provider trying to response `null=something+else`, we will got a mismatch:
-
-```
-Unexpected form post parameter 'null' received
-```
-
-This broke Postel's law. But it's not subject for this RFC.
-
-An alternative approach is: We can instead move `null` into unsupported syntax list. Then `null` is not allowed to define.
-
 ### Unsupported syntax
 
 Using json to define these values will result a panic:
 
+- Null
 - Boolean (true/false)
 - Object
 - Array of Arrays
@@ -118,6 +99,9 @@ For example, it will panic if we define like this:
 
 ```rust
 let json = json!({
+    "null": {
+        "pact:matcher:type": "null"
+    },
     "true": {
         "pact:matcher:type": "boolean",
         "value": true
@@ -151,6 +135,7 @@ pactffi_with_body(interaction, InteractionPart::Request, "application/x-www-form
 
 ```rust
 let json = json!({
+    "null": null,
     "true": true,
     "false": false,
     "object": {
@@ -179,6 +164,7 @@ Here is the flow we need to implement in Rust core (pact-reference project):
         - Return example JSON body with example values e.g. `{ "key": "example value" }`
     - Example JSON body will be converted to example Form UrlEncoded body e.g. `key=example+value`
     - If JSON body has one of these cases, it will panic:
+        - Null
         - Boolean (true/false)
         - Object
         - Array of Arrays
@@ -191,6 +177,7 @@ Here is the flow we need to implement in Rust core (pact-reference project):
 
 ### Unsupported syntax explaination
 
+* Null: There is no way to represent null in query string. User may want to define empty string instead.
 * Boolean: There is no standard way to represent boolean in query string. It can be 1/0, true/false or t/f. User need to define them explicitly.
 * Object: There is no standard way to represent object in query string.
 * Array of arrays: There is no standard way to represent array of arrays in query string.
