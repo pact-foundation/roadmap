@@ -10,8 +10,8 @@ This RFC proposes a way to define matching rules for body of a `application/x-ww
 
 ## Motivation
 
-Currently we can match the `application/x-www-form-urlencoded` request's body using matching rules. But there is no way to define
-matching rules for the body to fully take advantage of this feature.
+Currently we have the method [`match_form_urlencoded`](https://github.com/pact-foundation/pact-reference/blob/master/rust/pact_matching/src/form_urlencoded.rs#L12) to match the `application/x-www-form-urlencoded` request's body using matching rules.
+But there is no way to define matching rules for the body to fully take advantage of this feature.
 
 The only a way to define body for a `application/x-www-form-urlencoded` request is to define it as-is.
 
