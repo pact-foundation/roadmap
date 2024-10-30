@@ -84,7 +84,7 @@ pactffi_with_body(interaction, InteractionPart::Request, "application/x-www-form
 
 ### Unsupported syntax
 
-Using json to define these values will result a panic:
+These values are not supported:
 
 - Null
 - Boolean (true/false)
@@ -93,9 +93,7 @@ Using json to define these values will result a panic:
 - Array of Objects
 
 
-For example, it will panic if we define like this:
-
-* With matching rules:
+#### With matching rules:
 
 ```rust
 let json = json!({
@@ -131,7 +129,9 @@ let json = json!({
 pactffi_with_body(interaction, InteractionPart::Request, "application/x-www-form-urlencoded", json);
 ```
 
-* Without matching rules:
+These matchers and values are ignored. Unsupported error messages are logged. The extracted example body will be empty.
+
+#### Without matching rules:
 
 ```rust
 let json = json!({
@@ -147,6 +147,8 @@ let json = json!({
 pactffi_with_body(interaction, InteractionPart::Request, "application/x-www-form-urlencoded", json);
 ```
 
+The values are ignored. Unsupported error messages are logged. The extracted example body will be empty.
+
 ## Reference-level explanation
 
 Here is the flow we need to implement in Rust core (pact-reference project):
@@ -156,14 +158,14 @@ Here is the flow we need to implement in Rust core (pact-reference project):
     - Body: Integration JSON format , which may include:
         - Matching rules
         - Example values
-        - Generators (is not supported in this RFC, resulted in consumer's test failed)
+        - Generators
 - Rust core will process the body:
     - If content type hint is `application/x-www-form-urlencoded` AND detected content type from body is `application/json`
         - Extract matching rules
         - Extract generators
         - Return example JSON body with example values e.g. `{ "key": "example value" }`
     - Example JSON body will be converted to example Form UrlEncoded body e.g. `key=example+value`
-    - If JSON body has one of these cases, it will panic:
+    - These example values and matchers will be ignored:
         - Null
         - Boolean (true/false)
         - Object
@@ -171,9 +173,10 @@ Here is the flow we need to implement in Rust core (pact-reference project):
         - Array of Objects
     - Register the interaction as normal with:
         - Extracted matching rules
-        - Extracted generators
+        - Empty generators
         - Example Form UrlEncoded body
         - Content type: `application/x-www-form-urlencoded`
+    - Extracted generators are ignored (can be supported in future RFCs)
 
 ### Unsupported syntax explaination
 
@@ -182,12 +185,6 @@ Here is the flow we need to implement in Rust core (pact-reference project):
 * Object: There is no standard way to represent object in query string.
 * Array of arrays: There is no standard way to represent array of arrays in query string.
 * Array of objects: There is no standard way to represent array of objects in query string.
-
-### Panic vs Warning
-
-To prevent matching rules and generators of unsupported syntax to be written into pact file, Rust core need to panic.
-
-If we log a warning and ignore the unsupported syntax, matching rules and generators of ignored query params will be written to the pact file. This is undefined behavior.
 
 ### Generators
 
