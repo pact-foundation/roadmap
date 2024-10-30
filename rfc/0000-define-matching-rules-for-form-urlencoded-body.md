@@ -163,7 +163,12 @@ The values are ignored. Unsupported error messages are logged. The extracted exa
 
 - keys with no values (`a=&b=&c=`): can be achieved by define empty string value
 - values with no keys (`=a&=b&=c`): can't be achieved because empty key is not supported and will be ignored
-- repeated keys: (`a=1&a=2` or `a=2&a=1`): can be achieved by define array values
+- repeated keys with different ordering: (`a=1&a=2` vs `a=2&a=1`)
+    - can be defined by json
+    - can be defined by raw syntax
+    - ordering does matter:
+        - `a=1&a=2` does not match `a=2&a=1`
+        - `a=2&a=1` does not match `a=1&a=2`
 - special characters
     - `/`: will be encoded to `%2F`
     - `&`: will be encoded to `%26`
@@ -186,6 +191,14 @@ The values are ignored. Unsupported error messages are logged. The extracted exa
         - `=%3D%3D`
     - empty string can't match it
 - no key and value (`=&=&=`): can't be achieved because empty key is not supported and will be ignored
+- repeated keys with empty string value and different ordering: (`a=&a=1` vs `a=1&a=` vs `a=1` vs `a=`)
+    - can be defined by json
+    - can be defined by raw syntax
+    - ordering and size does matter:
+        - `a=&a=1` does not match `a=1&a=`
+        - `a=&a=1` does not match `a=1`
+        - `a=&a=1` does not match `a=`
+        - ...
 
 ## Reference-level explanation
 
