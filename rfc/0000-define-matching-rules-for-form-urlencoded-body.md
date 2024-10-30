@@ -188,13 +188,13 @@ Here is the flow we need to implement in Rust core (pact-reference project):
 
 ### Generators
 
-Generators will be written to pact file. Consumer test will failed with this warning log:
+Generators will be ignored for now to prevent this error:
 
 ```
 Generators only support JSON and XML
 ```
 
-User need to remove generators to make consumer test works.
+They may be supported in future RFCs.
 
 ## Drawbacks
 
