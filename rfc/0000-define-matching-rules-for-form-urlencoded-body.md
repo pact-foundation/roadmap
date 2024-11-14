@@ -163,7 +163,7 @@ The values are ignored. Unsupported error messages are logged. The extracted exa
 
 - keys with no values (`a=&b=&c=`): can be achieved by define empty string value
 - values with no keys (`=a&=b&=c`)
-    - can't be defined by json because empty key is not supported and will be ignored
+    - can be defined by json
     - can be defined by raw syntax
     - ordering does matter:
         - `=c&=a&=b` does not match `=a&=b&=c`
@@ -198,7 +198,7 @@ The values are ignored. Unsupported error messages are logged. The extracted exa
         - `=%3D%3D`
     - empty string can't match it
 - no key and value (`=&=&=`)
-    - can't be defined by json because empty key is not supported and will be ignored
+    - can be defined by json
     - can be defined by raw syntax
     - these query strings can't match it:
         - ``
