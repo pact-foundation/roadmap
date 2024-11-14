@@ -173,7 +173,7 @@ The values are ignored. Unsupported error messages are logged. The extracted exa
     - ordering does matter:
         - `a=1&a=2` does not match `a=2&a=1`
         - `a=2&a=1` does not match `a=1&a=2`
-- special characters
+- special characters (in key and value)
     - `/`: will be encoded to `%2F`
     - `&`: will be encoded to `%26`
     - `?`: will be encoded to `%3F`
