@@ -188,7 +188,10 @@ The values are ignored. Unsupported error messages are logged. The extracted exa
         - ...
     - empty string can't match it
 - only equals signs (`===`)
-    - can't be defined by json
+    - can't be defined by json because all of these cases are detected as `text/plain` by pact:
+        - `{"==":""}`
+        - `{"=":"="}`
+        - `{"":"=="}`
     - can be defined by raw syntax
     - these query strings can match it:
         - `===`
