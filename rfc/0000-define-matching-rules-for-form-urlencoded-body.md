@@ -6,7 +6,7 @@ tracking_issue: pact-foundation/roadmap#0000
 ---
 ## Summary
 
-This RFC proposes a way to define matching rules for body of a `application/x-www-form-urlencoded` request.
+This RFC proposes defining matching rules for bodies of type `application/x-www-form-urlencoded`.
 
 ## Motivation
 
