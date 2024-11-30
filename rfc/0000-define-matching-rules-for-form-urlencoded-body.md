@@ -84,13 +84,45 @@ pactffi_with_body(interaction, InteractionPart::Request, "application/x-www-form
 
 ### Generators
 
-Generators will be ignored for now to prevent this error:
+Generators can be defined like this:
+
+```rust
+let json = json!({
+    "id": {
+        "pact:matcher:type": "regex",
+        "regex": "^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$",
+        "pact:generator:type": "Uuid"
+    },
+    "age": {
+        "pact:matcher:type": "integer",
+        "value": 0,
+        "max": 130,
+        "min": 0,
+        "pact:generator:type": "RandomInt"
+    },
+    "name": [
+        {
+            "pact:matcher:type": "regex",
+            "regex": "Mr\\.|Mrs\\.|Miss|Ms\\.",
+            "value": "",
+            "pact:generator:type": "Regex"
+        },
+        {
+            "pact:matcher:type": "type",
+            "value": "",
+            "size": 10,
+            "pact:generator:type": "RandomString"
+        }
+    ]
+});
+pactffi_with_body(interaction, InteractionPart::Response, "application/x-www-form-urlencoded", json);
+```
+
+Consumer will receive response's body like this from mock server:
 
 ```
-Generators only support JSON and XML
+id=46441a68-1d3d-40f2-bbec-6e9bd26a4047&age=65&name=Mr.&name=Ea8XIXh7NQ
 ```
-
-They may be supported in future RFCs.
 
 ### Unsupported syntax
 
@@ -236,7 +268,7 @@ Here is the flow we need to implement in Rust core (pact-reference project):
         - Extract generators
         - Return example JSON body with example values e.g. `{ "key": "example value" }`
     - Example JSON body will be converted to example Form UrlEncoded body e.g. `key=example+value`
-    - These example values and matchers will be ignored:
+    - These example values (including matchers and generators) will be ignored:
         - Null
         - Boolean (true/false)
         - Object
@@ -244,10 +276,9 @@ Here is the flow we need to implement in Rust core (pact-reference project):
         - Array of Objects
     - Register the interaction as normal with:
         - Extracted matching rules
-        - Empty generators
+        - Extracted generators
         - Example Form UrlEncoded body
         - Content type: `application/x-www-form-urlencoded`
-    - Extracted generators are ignored (can be supported in future RFCs)
 
 ## Drawbacks
 
@@ -280,41 +311,10 @@ The problem with it are:
 ## Unresolved questions
 
 - There will be some bugs in Rust core need to be fix through the implementation of this RFC
-- Generators will not be supported for now
 - Postel's law need to be followed outside of the implementation of this RFC
 - Due to lack of standards, some of the syntax will not be supported
 
 ## Future possibilities
-
-### Define generators
-
-Define generators for `application/x-www-form-urlencoded` response's body:
-
-```rust
-let json = json!({
-    "id": {
-        "pact:matcher:type": "regex",
-        "regex": "^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$",
-        "pact:generator:type": "Uuid"
-    }
-});
-pactffi_with_body(interaction, InteractionPart::Response, "application/x-www-form-urlencoded", json);
-```
-
-Consumer will receive response's body like this from mock server:
-
-```
-id=46441a68-1d3d-40f2-bbec-6e9bd26a4047
-```
-
-
-Currently Rust core will throw this warning and do not generate values if we are trying to define generators in response's body:
-
-```
-2024-09-05T19:00:20.763719Z DEBUG tokio-runtime-worker pact_matching: Applying body generators...
-2024-09-05T19:00:20.763730Z DEBUG tokio-runtime-worker pact_plugin_driver::catalogue_manager: Looking for a content generator for application/x-www-form-urlencoded
-2024-09-05T19:00:20.764806Z  WARN tokio-runtime-worker pact_matching::generators::bodies: Unsupported content type application/x-www-form-urlencoded - Generators only support JSON and XML
-```
 
 ### Support arrays and objects
 
