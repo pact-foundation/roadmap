@@ -91,11 +91,29 @@ Mock server should return XML response like this:
 
 ### Implementation
 
-- Begin at root element
-    - Apply generator for each attribute
-    - Apply generator for each child element (recursively)
-    - Apply generator for each child text
-    - If there are no text & there is generator for text, then generate text and append to the element
+- For each generator
+  - Begin at root element
+      - Apply generator for each attribute (if the path is matched)
+      - Apply generator for each child text (if the path is matched)
+      - Apply generator for each child element (recursively)
+      - If the element is empty & there is generator for the text, then generate the text and append it to the element
+
+Generators are applied to text and attribute only. Here is how the generator interact with other structures of XML:
+
+* UTF-8 (e.g. `<俄语 լեզու="ռուսերեն">данные</俄语>`): Generator can work with tag, attribute and text that contains UTF-8 characters
+* XML Declaration (e.g. `<?xml version="1.0" encoding="ASCII"?>`): Generator does not add/change XML declaration
+* Empty tag (e.g. `<data />` or `<data></data>`): Generator append the text into the empty tag (if the path is matched) e.g. `<data />` or `<data></data>` become `<data>abcxyz</data>`
+* White-space preserving (i.e. `xml:space="preserve"`): Generator does not add/change extra while-space except those while-space belong to attribute's value and text
+* Escaping data (e.g. `<example>&lt;foo /&gt;</example>`): Generator will escape generated text and attribute's value
+* Comment (e.g. `<!-- some explanation -->`): Generator does not add/change comment
+* Array of element (e.g. `<data><tag>1</tag><tag>2</tag></data>`): Generator will apply to text and attribute of all elements (if the path is matched)
+* Type Declaration (e.g. `<!ELEMENT data (tag*)>`): Generator does not add/change Type Declaration
+* Attribute-list Declaration (e.g. `id ID #REQUIRED`): Generator does not add/change Attribute-list Declaration
+* Entity Declaration (e.g. `<!ENTITY domain "github.com">`): Generator does not add/change Entity Declaration
+* Namespace (e.g. `<n:a xmlns:n='http://example.com/namespace'>test</n:a>`)
+  * Generator can work with element and attribute that has namespace
+  * Generator can not add/change namespace for element and attribute
+* Processing Instruction (e.g. `<?xml-stylesheet type="text/xsl" href="style.xsl"?><root/>`): Generator does not add/change Processing Instruction
 
 ### Corner cases
 
