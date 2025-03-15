@@ -147,6 +147,11 @@ Generators are applied to text and attribute only. Here is how the generator int
     - Path: `$.root.a['#text']`
     - Before: `<?xml version='1.0'?><root><a>-1</a><a>-2</a></root>`
     - After: `<?xml version='1.0'?><root><a>123</a><a>234</a></root>`
+- Multiple elements at different path has text
+    - Generator: `RandomInt(0, 999)`
+    - Path: `$.root.*.c.*['#text']`
+    - Before: `<?xml version='1.0'?><root><a><c><d>-1</d><d>-2</d></c></a><b><c><e>-3</e><e>-4</e></c></b></root>`
+    - After: `<?xml version='1.0'?><root><a><c><d>123</d><d>234</d></c></a><b><c><e>345</e><e>456</e></c></b></root>`
 - Element has namespace
     - Generator: `RandomInt(0, 999)`
     - Path: `$.n:a['#text']`
@@ -157,10 +162,30 @@ Generators are applied to text and attribute only. Here is how the generator int
     - Path: `$.root.n:a['#text']`
     - Before: `<?xml version='1.0'?><root><n:a xmlns:n='http://example.com/namespace'>-1</n:a><a>-2</a></root>`
     - After: `<?xml version='1.0'?><root><n:a xmlns:n='http://example.com/namespace'>123</n:a><a>-2</a></root>`
+- Element has UTF-8 text
+    - Generator: `RandomString(3)`
+    - Path: `$.俄语['#text']`
+    - Before: `<?xml version='1.0'?><俄语>данные</俄语>`
+    - After: `<?xml version='1.0'?><俄语>abc</俄语>`
+- Escaping text
+    - Generator: `Regex("<foo/>")`
+    - Path: `$.a['#text']`
+    - Before: `<?xml version='1.0'?><a>1</a>`
+    - After: `<?xml version='1.0'?><a>&lt;foo/&gt;</a>`
 
 
 #### Attribute
 
+- Multiple elements has attribute
+    - Generator: `RandomInt(0, 999)`
+    - Path: `$.root.a['@attr']`
+    - Before: `<?xml version='1.0'?><root><a attr='-1'/><a attr='-2'/></root>`
+    - After: `<?xml version='1.0'?><root><a attr='123'/><a attr='234'/></root>`
+- Multiple elements at different path has text
+    - Generator: `RandomInt(0, 999)`
+    - Path: `$.root.*.c.*['@attr']`
+    - Before: `<?xml version='1.0'?><root><a><c><d attr='-1'/><d attr='-2'/></c></a><b><c><e attr='-3'/><e attr='-4'/></c></b></root>`
+    - After: `<?xml version='1.0'?><root><a><c><d attr='123'/><d attr='234'/></c></a><b><c><e attr='345'/><e attr='456'/></c></b></root>`
 - Attribute has namespace
     - Generator: `RandomInt(0, 999)`
     - Path: `$.a['@n:attr']`
@@ -171,6 +196,16 @@ Generators are applied to text and attribute only. Here is how the generator int
     - Path: `$.a['@n:attr']`
     - Before: `<?xml version='1.0'?><a n:attr='-1' attr='-2' xmlns:n='http://example.com/namespace'/>`
     - After: `<?xml version='1.0'?><a n:attr='123' attr='-2' xmlns:n='http://example.com/namespace'/>`
+- Element has UTF-8 attribute
+    - Generator: `RandomString(3)`
+    - Path: `$.俄语['@attr']`
+    - Before: `<?xml version='1.0'?><俄语 լեզու="ռուսերեն"/>`
+    - After: `<?xml version='1.0'?><俄语 լեզու="abc"/>`
+- Escaping attribute
+    - Generator: `Regex("' new-attr='\"val")`
+    - Path: `$.a['@attr']`
+    - Before: `<?xml version='1.0'?><a attr='1'/>`
+    - After: `<?xml version='1.0'?><a attr='&apos; new-attr=&apos;&quot;val'/>`
 
 ## Drawbacks
 
