@@ -98,6 +98,12 @@ Mock server should return XML response like this:
       - Apply generator for each child element (recursively)
       - If the element is empty & there is generator for the text, then generate the text and append it to the element
 
+Time complexity is O(G * E), where:
+* G: Number of generators
+* E: Number of XML elements
+
+### XML Specification
+
 Generators are applied to text and attribute only. Here is how the generator interact with other structures of XML:
 
 * UTF-8 (e.g. `<俄语 լեզու="ռուսերեն">данные</俄语>`): Generator can work with tag, attribute and text that contains UTF-8 characters
