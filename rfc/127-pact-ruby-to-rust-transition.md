@@ -1,8 +1,8 @@
 ---
 name: From Ruby to Rust - Improving the developer experience of Pact
-started: (fill me in with today's date, YYYY-MM-DD)
-pr: pact-foundation/roadmap#0000
-tracking_issue: pact-foundation/roadmap#0000
+started: 2025-10-16
+pr: pact-foundation/roadmap#127
+tracking_issue: pact-foundation/roadmap#127
 ---
 <!--
 The following is a template to help you write your RFC. You don't have to strictly follow this template, but it should help you to consider the various aspects of your proposal. If you have any questions, feel free to ask in the PR or in the Pact Slack community.
@@ -10,6 +10,22 @@ The following is a template to help you write your RFC. You don't have to strict
 ## Summary
 
 Simplify the Pact developer experience, by consolidating our cli toolings into a single binary built with rust, to reduce mental model complexity by migrating pact-ruby to the rust core.
+
+## Change Tracking
+
+### Pull Requests
+
+- [pact-plugin-cli](https://github.com/pact-foundation/pact-plugins/pull/92)
+- [pact_verifier_cli](https://github.com/pact-foundation/pact-reference/pull/507)
+- [pact_mock_server_cli](https://github.com/pact-foundation/pact-core-mock-server/pull/7)
+- [pact-stub-server](https://github.com/pact-foundation/pact-stub-server/pull/78)
+- [pact-standalone](https://github.com/pact-foundation/pact-standalone/pull/206)
+- [pact-docker-cli](https://github.com/pact-foundation/pact-docker-cli/pull/175)
+
+### Created assets
+
+- [pact-broker-cli](https://github.com/pact-foundation/pact-broker-cli)
+- [pact-cli](https://github.com/YOU54F/pact-cli)
 
 ## Motivation
 
