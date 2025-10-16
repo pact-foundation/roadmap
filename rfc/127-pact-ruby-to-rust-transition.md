@@ -15,12 +15,13 @@ Simplify the Pact developer experience, by consolidating our cli toolings into a
 
 ### Pull Requests
 
-- [pact-plugin-cli](https://github.com/pact-foundation/pact-plugins/pull/92)
-- [pact_verifier_cli](https://github.com/pact-foundation/pact-reference/pull/507)
-- [pact_mock_server_cli](https://github.com/pact-foundation/pact-core-mock-server/pull/7)
-- [pact-stub-server](https://github.com/pact-foundation/pact-stub-server/pull/78)
-- [pact-standalone](https://github.com/pact-foundation/pact-standalone/pull/206)
-- [pact-docker-cli](https://github.com/pact-foundation/pact-docker-cli/pull/175)
+- https://github.com/pact-foundation/pact-plugins/pull/92
+- https://github.com/pact-foundation/pact-reference/pull/507
+- https://github.com/pact-foundation/pact-core-mock-server/pull/7
+- https://github.com/pact-foundation/pact-stub-server/pull/78
+- https://github.com/pact-foundation/pact-standalone/pull/206
+- https://github.com/pact-foundation/pact-docker-cli/pull/175
+- https://github.com/pact-foundation/pact-ruby/pull/369
 
 ### Created assets
 
