@@ -15,18 +15,36 @@ Simplify the Pact developer experience, by consolidating our cli toolings into a
 
 ### Pull Requests
 
-- https://github.com/pact-foundation/pact-plugins/pull/92
-- https://github.com/pact-foundation/pact-reference/pull/507
-- https://github.com/pact-foundation/pact-core-mock-server/pull/7
-- https://github.com/pact-foundation/pact-stub-server/pull/78
-- https://github.com/pact-foundation/pact-standalone/pull/206
-- https://github.com/pact-foundation/pact-docker-cli/pull/175
-- https://github.com/pact-foundation/pact-ruby/pull/369
+- <https://github.com/pact-foundation/pact-core-mock-server/pull/7>
+- <https://github.com/pact-foundation/pact-plugins/pull/93>
+- <https://github.com/pact-foundation/pact-reference/pull/507>
+- <https://github.com/pact-foundation/pact-stub-server/pull/81>
+- <https://github.com/pact-foundation/pact-standalone/pull/214>
+- <https://github.com/pact-foundation/pact-ruby/pull/369>
+- homebrew - <https://github.com/pact-foundation/homebrew-tap/pull/147>
 
 ### Created assets
 
 - [pact-broker-cli](https://github.com/pact-foundation/pact-broker-cli)
 - [pact-cli](https://github.com/YOU54F/pact-cli)
+- distribution mechanisms
+  - scoop <https://github.com/pact-foundation/scoop>
+  - choco <https://github.com/pact-foundation/choco>
+  - ps1 install scripts <https://github.com/pact-foundation/pact-cli#install>
+
+##  Updated assets
+
+- ecosystem update
+  - <https://github.com/pact-foundation/docs.pact.io/pull/400>
+- docs updates
+  - cli docs
+    - <https://github.com/pact-foundation/docs.pact.io/pull/398>
+    - <https://docs.pact.io/implementation_guides/cli>
+  - ecosystem update
+    - <https://github.com/pact-foundation/docs.pact.io/pull/400>
+    - <https://docs.pact.io/diagrams/ecosystem>
+- distribution mechanisms
+  - <https://github.com/pact-foundation/homebrew-tap>
 
 ## Motivation
 
@@ -56,7 +74,7 @@ Explain the proposal as if it were already a part of Pact. That generally means:
 
 ## 💁 Example
 
-Composed cli: https://github.com/YOU54F/pact-cli/blob/main/src/cli.rs#L11-L29
+Composed cli: <https://github.com/YOU54F/pact-cli/blob/main/src/cli.rs#L11-L29>
 
 ```rust
 pub fn build_cli() -> Command {
@@ -81,7 +99,7 @@ pub fn build_cli() -> Command {
 }
 ```
 
-Cargo toml: https://github.com/YOU54F/pact-cli/blob/main/Cargo.toml#L43-L47
+Cargo toml: <https://github.com/YOU54F/pact-cli/blob/main/Cargo.toml#L43-L47>
 
 ```toml
 pact-stub-server = { version = "*", git = "https://github.com/YOU54F/pact-stub-server.git", branch = "feat/cli_as_lib"}
@@ -137,31 +155,31 @@ usage
 ```
 
 - Explaining how Pact users should *think* about the feature, and how it should impact the way they use Pact. It should explain the impact as concretely as possible.
-	- If I need to use Pact, I need the `pact` cli, it should be top of mind in the docs and a one liner to install
+  - If I need to use Pact, I need the `pact` cli, it should be top of mind in the docs and a one liner to install
 - If applicable, provide sample error messages, deprecation warnings, or migration guidance.
-	- `PACT_CLI_LEGACY` flag in `pact-standalone` / `pact-docker-cli` to allow reverting back to original ruby implementation
+  - `PACT_CLI_LEGACY` flag in `pact-standalone` / `pact-docker-cli` to allow reverting back to original ruby implementation
 - If applicable, describe the differences between teaching this to existing Pact users and new Pact users.
-	- We just need to tell users to install a single cli mechanism
-	- Simple copy/paste install script on website
-	- Just need to explain each cli purpose and function
-	- tell users that some cli func is available in native language form
-	- prefer language based dsl for mock-server / verifier
-	- use pact cli to start up a local pact broker either with docker/ruby
-	- use pact cli to 
-		- interact with broker
-		- use pact stub server func to use generated as a stub for integration tests
-		- use pact plugin cli to install custom plugin
+  - We just need to tell users to install a single cli mechanism
+  - Simple copy/paste install script on website
+  - Just need to explain each cli purpose and function
+  - tell users that some cli func is available in native language form
+  - prefer language based dsl for mock-server / verifier
+  - use pact cli to start up a local pact broker either with docker/ruby
+  - use pact cli to
+    - interact with broker
+    - use pact stub server func to use generated as a stub for integration tests
+    - use pact plugin cli to install custom plugin
 - Discuss how this impacts existing Pacts, and the Pact ecosystem in general.
-	- `pact-broker-cli` is build as a 1-2-1 replacement
-	- `pact_mock_server_cli`  / `pact_verifier_cli` / `pact-stub-server` are not direct drop in replacements
-		- most users do not rely on the `pact_mock-service` / `pact-provider-verifier` unless you are using pact-ruby.
-			- pact-ruby will be upgraded to support the rust core, as part of this motion
-		- pact-python v2 is now using pact-rust core, and has ruby fallback. pact-python v3 bring rust support
-	- we may break some users esoteric flows, these will at least be uncovered, before projects are archived
+  - `pact-broker-cli` is build as a 1-2-1 replacement
+  - `pact_mock_server_cli`  / `pact_verifier_cli` / `pact-stub-server` are not direct drop in replacements
+    - most users do not rely on the `pact_mock-service` / `pact-provider-verifier` unless you are using pact-ruby.
+      - pact-ruby will be upgraded to support the rust core, as part of this motion
+    - pact-python v2 is now using pact-rust core, and has ruby fallback. pact-python v3 bring rust support
+  - we may break some users esoteric flows, these will at least be uncovered, before projects are archived
 
 ### Proposed Benefits
 
-a single standalone executable containing all of pact’s latest cli functionality 
+a single standalone executable containing all of pact’s latest cli functionality
 
 - smallest total size
 - easier to newbies
@@ -169,85 +187,86 @@ a single standalone executable containing all of pact’s latest cli functionali
 - easier to work with security team requirements ( no need to explain why ruby is running )
 - easier to document
 
-### Proposed actions 
-
+### Proposed actions
 
 ### rewrite pact-broker-cli in rust
 
-1. create `pact-broker-cli` crate in rust
-2. should be fully backwards compatible with existing pact_broker-client
-3. should target at least all existing supported pact-standalone targets
+1. ✅ create `pact-broker-cli` crate in rust
+2. ✅ should be fully backwards compatible with existing pact_broker-client
+3. ✅ should target at least all existing supported pact-standalone targets
 
 ### make rust cli naming conventions align
 
-1. Provide guidelines on rust crate / cli / library naming conventions
-2. Align binary names
-3. Avoid changing existing crate names, but binary renames are allowed
+1. ✅ Provide guidelines on rust crate / cli / library naming conventions
+2. ✅ Align binary names
+3. ✅ Avoid changing existing crate names, but binary renames are allowed
+
 #### Conventions
 
-- binary names separated by hyphens
-- convention 
-	- `pact-<tool name>` for crates which are libs / clis
-	- `pact-<tool name>-cli` for crates which are clis only
-	- `pact_<tool name>` for crates which are libs only
-	- `pact_<tool name>` for libraries imports
-	- `pact_<tool name>_cli` for cli libraries imports
-	- `pact-<tool name>` for cli binaries
-- drops cli suffix from all tools
-- crates names may be separated by hyphens or underscores, existing crates unaffected
+- ✅ binary names separated by hyphens
+- convention
+  - `pact-<tool name>` for crates which are libs / clis
+  - `pact-<tool name>-cli` for crates which are clis only
+  - `pact_<tool name>` for crates which are libs only
+  - `pact_<tool name>` for libraries imports
+  - `pact_<tool name>_cli` for cli libraries imports
+  - `pact-<tool name>` for cli binaries
+- ✅ drops cli suffix from all tools for binaries
+- ✅ crates names may be separated by hyphens or underscores, existing crates unaffected
 - library imports are always used as underscores, with cli based libraries allows either or mixed underscore/hyphen
 
 #### Impact
 
 - some binaries will be renamed
-	- pact_mock_server_cli to pact-mock-server
-	- pact-plugin-cli to pact-plugin
-	- pact_verifier_cli to pact-verifier
-	- pact-broker-cli to pact-broker
+  - ✅ pact_mock_server_cli to pact-mock-server
+  - ✅ pact-plugin-cli to pact-plugin
+  - ✅ pact_verifier_cli to pact-verifier
+  - ✅ pact-broker-cli to pact-broker-client
 - End result after renaming
-	- pact
-	- pact-broker
-	- pact-plugin
-	- pact-mock-server
-	- pact-stub-server
+  - ✅ pact
+  - ✅ pact-broker-client
+  - ✅ pact-plugin
+  - ✅ pact-mock-server
+  - ✅ pact-stub-server
 - CLI layout in single cli
-	- pact
-		- broker
-		- plugin
-		- mock-server
-		- stub-server
+  - ✅ pact
+    - ✅ broker
+    - ✅ plugin
+    - ✅ mock-server
+    - ✅ stub-server
 
 ### make rust cli’s composable
 
-1. Seperate logic from binary only, to shared `lib.rs`
-2. Allow binaries to be imported and composed in a meta cli via `<crate_name>_cli`
-	1. Library imports are down-cased by default
-
+1. ✅ Seperate logic from binary only, to shared `lib.rs`
+1. ✅ Allow binaries to be imported and composed in a meta cli via `<crate_name>_cli`
+ 1. ✅ Library imports are down-cased by default
 
 ### create pact-cli in rust, composed of all pact rust cli’s
 
-1.  create `pact` crate in rust
-	1. owned namespace provided from now renamed `codas` project
+1. ✅ create `pact` crate in rust
+ 1. ✅ owned namespace provided from now renamed `codas` project
 2. Agree on nomenclature for subcommands
 3. Release to
-	1. Cargo as `pact`
-	2. Docker as `pact-foundation/pact` (ghcr) / `pactfoundation/pact` (docker.io)
-	3. Homebrew as `pact-foundation/pact` via `homebrew-pact` repo
-
+ 1. ✅ Cargo as `pact`
+ 2. ✅ Docker as `pact-foundation/pact` (ghcr) / `pactfoundation/pact` (docker.io)
+ 3. ✅ Homebrew as `pact-foundation/tap/pact` via `homebrew-tap` repo
 
 ### add new cli's to existing distribution mechanism
 
-1. Existing mechanisms are 
-	1. pact-standalone
-	2. homebrew-pact-standalone
-	3. pact-docker-cli
-	4. pactflow/actions
-2. add pact-cli to packages
-	- expose new `pact-cli` executable
-	- divert existing commands to rust executables
-		- without executing ruby runtime (via wrapper or bat scripts)
-	- add env based fallback to ruby tools `PACT_CLI_LEGACY`
-	- pubish as `minor` version bump
+1.  Existing mechanisms are
+	- pact-standalone
+		- No longer being performed, rust tools being removed
+	- ✅ homebrew-pact-standalone
+		- renamed to homebrew-tap
+	- pact-docker-cli
+		- ✅ no action
+	- pactflow/actions
+2. ❌ add pact-cli to packages
+	- ❌ expose new `pact-cli` executable
+	- ❌ divert existing commands to rust executables
+	- ❌ without executing ruby runtime (via wrapper or bat scripts)
+	- ❌ add env based fallback to ruby tools `PACT_CLI_LEGACY`
+	- ❌ pubish as `minor` version bump
 3. Archival & Deprecation
 	1. Remove ruby runtime in major version
 	2. A tool nomeclature in major version
@@ -256,64 +275,66 @@ a single standalone executable containing all of pact’s latest cli functionali
 
 ### create new delivery mechanisms
 
-	- docker
-		- `pact-foundation/pact` (ghcr)
-		- `pactfoundation/pact` (docker.io)
-	- cargo
-		- `pact`
-		- `pact-broker-cli`
-	- install scripts
-		- unix shell (posix, non bash specific)
-		- windows powershell
-	- github action
-		- `- uses: you54f/pact-cli@main`
-	- distribution mechanisms
-		- npm
-			- `@pact-foundation/pact-cli`
-		- pypi
-			- `pip install pact-python-cli`
-		- homebrew
-			- `brew install pact-foundation/pact`
-		- choco
-			- `choco install pact`
-		- scoop
-			- `scoop install pact`
-		- alpine pkgs
-			- is this neccessary if we have 1 liner install scripts?
-		- rpm
-			- is this neccessary if we have 1 liner install scripts?
-		- deb
-			- is this neccessary if we have 1 liner install scripts?
+- docker
+	- ✅ `pact-foundation/pact` (ghcr)
+	- ✅ `pactfoundation/pact` (docker.io)
+- cargo
+	- ✅ `pact`
+	- ✅ `pact-broker-cli`
+- install scripts
+	- ✅ unix shell (posix, non bash specific)
+	- ✅ windows powershell
+- github action
+	- `✅ - uses: pact-foundation/pact-cli@main`
+- distribution mechanisms
+	- npm
+		- 🚧 `@pact-foundation/pact-cli`
+		- needs adding to pact-cli
+	- pypi
+		- 🚧 `pip install pact-python-cli`
+		- needs adding to pact-python-cli package
+	- homebrew
+		✅ - `brew install pact-foundation/tap/pact`
+	- choco
+		- 🚧 `choco install pact`
+		- needs submitting to choco community
+	- scoop
+		- 🚧 `scoop install pact`
+		- needs adding to extras bucket
+	- ❌ alpine pkgs
+		- is this neccessary if we have 1 liner install scripts?
+	- ❌ rpm
+		- is this neccessary if we have 1 liner install scripts?
+	- ❌ deb
+		- is this neccessary if we have 1 liner install scripts?
 
 ### migrate pact ruby to pact rust core
 
-1. transfer `you54f/pact-ruby-ffi` to `pact-foundation`
-2. merge pact-ruby v2 changes
-3. release as `minor`
-	1. no breaking changes to existing pact-ruby v1 code
-	2. some new dependencies introduced to support pact-ruby v2 code
-4. in release v2.x
+1. ✅ transfer `you54f/pact-ruby-ffi` to `pact-foundation`
+2. ✅ merge pact-ruby v2 changes
+	1. ✅ released as `minor`
+	1. ✅ no breaking changes to existing pact-ruby v1 code
+	1. ✅ some new dependencies introduced to support pact-ruby v2 code
+1. in release v2.x
 	1. remove pact v1 code
-	2. migrate `v2` namespaced code to main lib
+	1. migrate `v2` namespaced code to main lib
 
 ### archival of ruby code
 
-	- post pact-ruby v2.x release
-		- pact-message
-		- pact-provider-verifier
-		- pact-stub-service
-		- pact_mock-service
-	- post pact-cli release with new distrubition mechanisms
-		- pact_broker client
-	- post release of both of above
-		- pact-docker-cli
-		- pact-standalone
-		- homebrew-pact-standalone
-	- pact-support
-		- migrate all pact_broker required code, into pact_broker
-		- or migrate all unrequired shared code from pact-support
-	
-
+- post pact-ruby v2.x release
+ 	- pact-message
+ 	- pact-provider-verifier
+ 	- pact-stub-service
+ 	- pact_mock-service
+- post pact-cli release with new distrubition mechanisms
+ 	- pact_broker client
+- post release of both of above
+ 	- pact-docker-cli
+  - pact-standalone
+  - homebrew-tap pact-legacy formula
+- pact-support
+  - migrate all pact_broker required code, into pact_broker
+  - or migrate all unrequired shared code from pact-support
 
 ## Reference-level explanation
 
@@ -325,9 +346,6 @@ This is the technical portion of the RFC. Explain the design in sufficient detai
 
 The section should return to the examples given in the previous section, and explain more fully how the detailed proposal makes those examples work.
 
-
-
-
 ## End State CLI Tooling
 
 | OS      | Architecture | Supported |
@@ -338,31 +356,29 @@ The section should return to the examples given in the previous section, and exp
 | Linux   | arm64        | ✅         |
 | Windows | x86_64       | ✅         |
 | Windows | arm64        | ✅         |
-- End result after renaming
-	- pact
-	- pact-broker
-	- pact-plugin
-	- pact-mock-server
-	- pact-stub-server
-- CLI layout in single cli
-	- pact
-		- broker
-		- plugin
-		- mock-server
-		- stub-server
 
+- End result after renaming
+  - pact
+  - pact-broker
+  - pact-plugin
+  - pact-mock-server
+  - pact-stub-server
+- CLI layout in single cli
+  - pact
+    - broker
+    - plugin
+    - mock-server
+    - stub-server
 
 Each available via
 
 - Docker
-	- DockerHub
-	- GHCR
+  - DockerHub
+  - GHCR
 - HomeBrew
 - Install Scripts
-	- Unix
-	- Windows
-
-
+  - Unix
+  - Windows
 
 - ✅ Supported
 - 🗑 Retired
@@ -402,7 +418,6 @@ Each available via
 [broker-cli]: https://github.com/pact-foundation/pact_broker-cli
 [pactflow-client-cli]: https://github.com/pact-foundation/pact_broker-client?tab=readme-ov-file#provider-contracts-pactflow-only
 [pact-cli]: https://github.com/pact-foundation/pact-ruby/tree/master/lib/pact/cli
-[wrapper]: /wrapper_implementations
 [pact-standalone-release]: https://github.com/pact-foundation/pact-standalone/releases
 
 ## Docker
@@ -434,7 +449,6 @@ Each available via
 [verifier-cli-docker]: https://hub.docker.com/r/pactfoundation/pact-ref-verifier
 [stub-cli-docker]: https://hub.docker.com/r/pactfoundation/pact-stub-server
 [mock-cli-docker]: https://hub.docker.com/r/pactfoundation/pact-ref-mock-server
-[pact-docker]: https://hub.docker.com/r/you54f/pact
 [pact-docker-github]: https://github.com/you54f/pact-cli/pkgs/container/pact
 [pact-cli-docker]: https://hub.docker.com/r/pactfoundation/pact-cli
 [pact-cli-docker-github]: https://github.com/pact-foundation/pact-ruby-cli/pkgs/container/pact-cli
@@ -444,7 +458,6 @@ Each available via
 [verifier-cli-docker-repo]: https://github.com/pact-foundation/pact-reference/blob/master/rust/pact_verifier_cli/Dockerfile
 [stub-cli-docker-repo]: https://github.com/pact-foundation/pact-stub-server/tree/master/docker
 [mock-cli-docker-repo]: https://github.com/pact-foundation/pact-reference/blob/master/rust/pact_mock_server_cli/Dockerfile
-[pact-cli-repo]: https://github.com/you54f/pact-cli
 [pact-cli-docker-repo]: https://github.com/pact-foundation/pact-ruby-cli
 [pact-broker-docker-repo]: https://github.com/pact-foundation/pact-broker-docker
 [pact-broker-chart-repo]: https://github.com/pact-foundation/pact-broker-chart
@@ -467,6 +480,7 @@ Each available via
 
 [homebrew-standalone]: https://github.com/pact-foundation/homebrew-pact-standalone
 [homebrew-pact]: https://github.com/pact-foundation/homebrew-pact
+
 ###  Homebrew Pact Supported Platforms
 
 | OS    | Architecture | Supported |
@@ -475,7 +489,6 @@ Each available via
 | OSX   | arm64        | ✅         |
 | Linux | x86_64       | ✅         |
 | Linux | arm64        | ✅         |
-
 
 ## Drawbacks
 
@@ -487,38 +500,38 @@ We have previously held off on doing this due to other priorities but I strongly
 
 - Why is this design the best in the space of possible designs?
 
-	- Migrates users away from pact-ruby core
-	- negates need to continue to build esoteric packaging system (traveling-ruby)
-	- Gives users the latest features
-	- Gives users the latest features, in the simplest mechanisms
-	- A single binary composed of all our Pact projects, which shares dependencies, takes us the most minimal disk space
+  - Migrates users away from pact-ruby core
+  - negates need to continue to build esoteric packaging system (traveling-ruby)
+  - Gives users the latest features
+  - Gives users the latest features, in the simplest mechanisms
+  - A single binary composed of all our Pact projects, which shares dependencies, takes us the most minimal disk space
 
 - What other designs have been considered and what is the rationale for not choosing them?
-	- other languages, but not preferred due to inability to compose rust applications and share deps
+  - other languages, but not preferred due to inability to compose rust applications and share deps
 
 - What is the impact of not doing this?
-	- prolonged pain of a fragmented ecosystem
+  - prolonged pain of a fragmented ecosystem
 
 ## Unresolved questions
 
 - What parts of the design do you expect to resolve through the RFC process before this gets merged?
-	- naming conventions
+  - naming conventions
 - What parts of the design do you expect to resolve through the implementation of this feature before stabilization?
-	- issues in `pact-broker-cli` implementation, when introduced as the default, through existing distribution mechanisms
-		- fallback provided to allow users to revert to existing pact-ruby ecosystem, to iron our any wrinkles
-	- system compatibility
-		- should be improved by single binary, and our building mechanisms
-			- old versions of glibc
-			- static musl versions
-			- macos deployment target set to `11.0`
-			- windows performance, as the ruby distrib mechanism could not provide native gems
+  - issues in `pact-broker-cli` implementation, when introduced as the default, through existing distribution mechanisms
+    - fallback provided to allow users to revert to existing pact-ruby ecosystem, to iron our any wrinkles
+  - system compatibility
+    - should be improved by single binary, and our building mechanisms
+      - old versions of glibc
+      - static musl versions
+      - macos deployment target set to `11.0`
+      - windows performance, as the ruby distrib mechanism could not provide native gems
 
 ## Future possibilities
 
 make the cli dx experience killer
 
 - `pact doctor` - check for common project setup issues
-	- could be scoped to lang `pact doctor <lang>`
+  - could be scoped to lang `pact doctor <lang>`
 - `pact broker docker info` - run pact broker locally with docker
 - `pact broker ruby info` - run pact broker locally with system /userinstalled ruby
 - `pact init <lang>` - setup pact for a particular language
