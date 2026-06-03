@@ -32,11 +32,11 @@ Let me make the Pact landscape a little easier to navigate
 
 | Project              | Resources                                                                                                                                                                                                       |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Pact Broker          | [Github](https://github.com/pact-foundation/pact_broker) / [Github Actions](https://github.com/pact-foundation/pact_broker/actions) / [Docker](https://hub.docker.com/repository/docker/pactfoundation/pact-broker) |
-| Pact CLI             | [Github](https://github.com/pact-foundation/pact-ruby-cli) / [Docker](https://hub.docker.com/repository/docker/pactfoundation/pact-cli)                                                                           |
+| Pact Broker          | [GitHub](https://github.com/pact-foundation/pact_broker) / [GitHub Actions](https://github.com/pact-foundation/pact_broker/actions) / [Docker](https://hub.docker.com/repository/docker/pactfoundation/pact-broker) |
+| Pact CLI             | [GitHub](https://github.com/pact-foundation/pact-ruby-cli) / [Docker](https://hub.docker.com/repository/docker/pactfoundation/pact-cli)                                                                           |
 | Pact Ruby Standalone | [Releases](https://github.com/pact-foundation/pact-ruby-standalone/releases) / [E2E example](https://github.com/pact-foundation/pact-ruby-standalone-e2e-example)                                                 |
-| Pact JS              | [Github](https://github.com/pact-foundation/pact-js) / [Message docs](https://github.com/pact-foundation/pact-js#asynchronous-api-testing)                                                                        |
-| Roadmap              | [Canny](https://pact.canny.io)                                                                                                                                                                                  |
+| Pact JS              | [GitHub](https://github.com/pact-foundation/pact-js) / [Message docs](https://github.com/pact-foundation/pact-js#asynchronous-api-testing)                                                                        |
+| Roadmap              | [GitHub](https://github.com/pact-foundation/roadmap/pulls?q=sort%3Aupdated-desc+is%3Apr+is%3Aopen+)                                                                                                                                                                                  |
 | Docs                 | [Homepage](https://docs.pact.io)                                                                                                                                                                                |
 
 ## Get involved!
