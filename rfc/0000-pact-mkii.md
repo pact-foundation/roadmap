@@ -1,8 +1,7 @@
 ---
 name: pact_mkii
 started: 2026-07-30
-pr: pact-foundation/roadmap#0000
-tracking_issue: pact-foundation/roadmap#0000
+pr: pact-foundation/roadmap#146
 ---
 ## Summary
 
