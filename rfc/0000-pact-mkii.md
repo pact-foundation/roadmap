@@ -1,6 +1,7 @@
 ---
 name: pact_mkii
 started: 2026-07-30
+revised: 2026-09-24
 pr: pact-foundation/roadmap#146
 ---
 ## Summary
@@ -27,9 +28,19 @@ pillars:
    production/consumption) are part of the core design, with declarative configuration first and scripts as
    the escape hatch.
 
-The pact file remains the interchange artifact (a new major format version), the broker workflow is
-unchanged, and existing v1–v4 pact files remain verifiable. Deterministic verification remains the
-foundation; AI assistance is an optional layer, never a requirement.
+A contract file remains the interchange artifact (a new, separately versioned format), the broker
+workflow is unchanged, and existing v1–v4 pact files remain verifiable. Deterministic verification
+remains the foundation; AI assistance is an optional layer, never a requirement.
+
+**Revision 2 (2026-09-24): prototype evidence.** This revision incorporates the findings of
+[Pact Janus](https://github.com/rholshausen/pact-janus), a prototype built to test the five pillars
+against real code: one Rust engine, TypeScript and JVM SDKs, a CLI, three embeddings, a third-party
+component and a conformance suite. All five pillars held. Where the evidence changed the design, the
+text below says what we would now build, and the first revision is in this PR's history. The biggest
+change is the engine embedding: the subprocess, not WASM, is every SDK's primary embedding. Every
+unresolved question from the first revision now has an answer or a statement of what was learned; the
+detail, with links to the ADRs and measurements behind each claim, is in
+[RFC feedback](https://github.com/rholshausen/pact-janus/blob/main/Documentation/rfc-feedback.md).
 
 ## Motivation
 
@@ -235,8 +246,8 @@ values and which nodes failed — matching stops being a black box.
 - **Plugin authors** implement the same component interfaces the built-in functionality uses, so the
   extension path is the well-trodden path, documented by the core's own source.
 - **Existing users** keep their pact files: the MkII engine reads and verifies v1–v4 pacts, and
-  `pact upgrade` converts v3/v4 files to the new format. Teams migrate consumer-by-consumer; the broker
-  mediates mixed fleets as it does today.
+  `pact upgrade` converts v3/v4 files to the new format, reporting anything the conversion narrows or
+  loses. Teams migrate consumer-by-consumer; the broker mediates mixed fleets as it does today.
 
 ## Reference-level explanation
 
@@ -262,16 +273,32 @@ values and which nodes failed — matching stops being a black box.
 
 #### The engine boundary
 
-The Engine Protocol is defined once in an IDL (WIT and/or protobuf — to be settled during implementation)
-and delivered over three embeddings, all speaking the same protocol:
+The Engine Protocol is defined once, as schema-governed JSON documents ("frames") carried over a frozen,
+one-function byte pipe. JSON Schema is the IDL; WIT describes only the pipe. The schemas are the
+specified surface, a CI checker enforces their open-world evolution rules, and SDK bindings are
+generated from them
+([ADR 0002](https://github.com/rholshausen/pact-janus/blob/main/Documentation/decisions/0002-document-first-protocol-over-frozen-pipes.md)). The protocol is
+delivered over three embeddings, all speaking it identically:
 
-1. **WASM component** (preferred): the engine compiled to a WASM component, hosted in-process
-   (wazero for Go, Chicory for JVM, wasmtime bindings for .NET/Python, built-in support in Node). No
-   process management, no native binaries per platform, sandboxed, memory-safe.
-2. **Subprocess**: a `pact-engine` executable speaking the protocol over stdio/socket (the LSP model), for
-   platforms without a good WASM host and for the CLI itself.
-3. **Minimal C ABI** (fallback): three functions — create, call-with-document, free — carrying the same
-   protocol messages, for embedders that need neither of the above.
+1. **Subprocess** (primary, for every SDK): a `pact-engine` executable speaking the protocol over stdio
+   with Content-Length framing (the LSP model). It is spawned per test run by the SDK, pinned by protocol
+   version in its handshake, and exits when its stdin closes, so it cannot outlive its host. It is never a
+   shared daemon. Spawn-to-ready is about a millisecond, and a call costs almost nothing over in-process.
+2. **WASM component** (offline operations): the same engine compiled to a WASM component, for hosts that
+   want Pact's answers without a native binary — `explain`, `upgrade`, the subsumption check, variant
+   enumeration — in a broker, an IDE, a browser, or a sandboxed CI step. It runs the engine's own work
+   within 10–35% of native.
+3. **Minimal C ABI** (fallback, not prototyped): three functions — create, call-with-document, free —
+   carrying the same frames, for embedders that need neither of the above.
+
+The first revision made WASM the preferred embedding. The prototype showed that a WASM engine cannot run
+a consumer test or a verification in any language: a mock server needs a socket, its exchange loop needs
+a thread, and a `wasm32-wasip2` guest has neither. It also cannot host third-party components, since a
+WASM guest cannot host WASM. Performance was never the problem; capability was
+([ADR 0023](https://github.com/rholshausen/pact-janus/blob/main/Documentation/decisions/0023-the-subprocess-is-the-primary-embedding-and-wasm-serves-offline-operations.md),
+[performance report](https://github.com/rholshausen/pact-janus/blob/main/Documentation/performance-report.md)). The cost is that per-OS native binaries come back,
+distributed the way esbuild and Biome ship theirs through npm. The only route back to a WASM engine that
+runs a test is a transport the host provides, which is named and not taken.
 
 The protocol is *coarse-grained and document-oriented*: an SDK submits a complete interaction specification
 in one call, rather than orchestrating dozens of stateful mutations. Sketch:
@@ -299,6 +326,12 @@ This directly removes the FFI failure modes: there is no per-object memory manag
 panic-across-boundary, no bespoke async bridging, and — because the orchestration lives inside the engine —
 no room for two SDKs to sequence primitives differently and get different behaviour.
 
+Two things the sketch still leaves in the SDK, and should not. First, only the SDK knows whether the
+consumer's test closure *passed* for a variant. Today every SDK must withhold a contract whose test failed,
+and one that forgets writes a dishonest contract. The sketch needs an operation reporting that verdict to
+the engine. Second, engine-side failures only reach the SDK at `finalise`, so they surface at the end of a
+suite rather than in the test that caused them. Both are open.
+
 #### Interaction specifications and the plan compiler
 
 An interaction spec is a declarative document (JSON) containing: description, provider states, the
@@ -312,10 +345,17 @@ pipelines; interpreter; pretty/executed forms).
 Design consequences:
 
 - The **plan node grammar and core action set** (`match:equality`, `match:regex`, `expect:empty`,
-  `convert:UTF8`, …) become specified, versioned surface. Content handlers and plugins contribute plan
-  *fragments* and custom actions under namespaces, rather than implementing matching end-to-end. A plugin
-  that can express its matching as a plan fragment needs no runtime callback for matching at all;
-  plugin-supplied actions are invoked by the interpreter where a fragment is insufficient.
+  `convert:UTF8`, …) become specified, versioned surface. Grammar versions are ordered, the engine says
+  which it reads, and anything a component contributes declares which it targets, so every mismatch
+  fails by name before anything runs. Components contribute custom actions under namespaces, invoked by
+  the interpreter, rather than implementing matching end-to-end.
+- *How much* of a plan a component contributes is open. The prototype let a content component contribute
+  a whole slot's plan fragment. That works, but it makes the component a shape compiler for everything in
+  the slot, and without knowing the variant: a pinned variant checked against a fragment passed where the
+  engine's own plan correctly failed. The likely answer is contribution per operator: the engine compiles
+  the slot, and the component says what one value operator means for its content type
+  ([ADR 0022](https://github.com/rholshausen/pact-janus/blob/main/Documentation/decisions/0022-a-fragment-replaces-its-slots-plan-and-declares-a-grammar-the-engine-says-it-reads.md),
+  [stress test](https://github.com/rholshausen/pact-janus/blob/main/Documentation/plan-fragment-stress-test.md)).
 - Old pact files are supported by compiling matching rules to plans; the plan compiler is the single place
   where v1–v4 cascading/precedence semantics live.
 - `explain` is a kernel operation, not a feature each SDK builds.
@@ -331,7 +371,7 @@ Shapes generalise today's matchers with structural operators:
 | `nullable(shape)` | value or null (distinct from absent) | yes |
 | `anyOf(v1, v2, …)` | enum of allowed values | yes: one per value |
 | `oneOf(discriminator, {alt: shape…})` | discriminated union / polymorphism | yes: one per alternative |
-| `eachLike(shape, {min, max})` | today's array matching + cardinality | boundary variants (min, min+1) |
+| `eachLike(shape, {min, max})` | today's array matching + cardinality | boundary variants (min, min+1, and max when finite) |
 | `forbidden` | must not be present (e.g. PII assertions) | no |
 
 **Variant semantics** are the heart of the optionality answer:
@@ -341,11 +381,22 @@ Shapes generalise today's matchers with structural operators:
 - **Consumer side**: the test closure runs once per selected variant with the mock serving that variant.
   A variant that the consumer code cannot handle fails the build. Only exercised variants are recorded.
 - **Provider side, requests**: the verifier replays every recorded request variant; the provider must
-  accept all of them.
+  accept all of them. This is why requests need no provider shape. It depends on request dimensions
+  being **pinned** on the consumer side: under a variant the mock accepts only requests that variant
+  admits, so a declared request width is one the consumer actually sent. The cost is that a closure over
+  such an interaction is variant-*parameterised*: it reads the variant to decide what to send.
+- **Cardinality points are matched as regions.** `min` and `max` are exact; `min+1` is served as `min+1`
+  elements and matched as "more than the minimum", so a basket of five meets it
+  ([ADR 0024](https://github.com/rholshausen/pact-janus/blob/main/Documentation/decisions/0024-request-dimensions-stay-pinned-and-a-cardinality-point-matches-a-region.md)).
 - **Provider side, responses**: the provider's actual response is matched against the shape; optional
   fields match whether present or absent, and `oneOf` matches via the discriminator. Where a specific
   response variant must be induced (e.g. "the shipped order" case), the variant can pin provider state
-  parameters: `given('an order exists', { shipped: whenVariant('shippedAt', 'present') })`.
+  parameters: `given('an order exists', { shipped: whenVariant('shippedAt', 'present') })`. The DSL
+  helper expands to a separate `variant-params` member — never a wrapped value, which would be ambiguous
+  against real parameter data — mapping each point of a dimension to a value. The engine resolves it
+  per variant, and a provider that cannot produce a state reports `state-unavailable`, distinct from
+  `failed`, because the remedy is a contract change
+  ([ADR 0009](https://github.com/rholshausen/pact-janus/blob/main/Documentation/decisions/0009-variant-bound-provider-state-parameters.md)).
 
 This preserves Pact's discipline — nothing is declared that is not demonstrated — while collapsing the
 dozen hand-written tests into one test with a managed matrix. Crucially, a shape is still not a schema:
@@ -372,20 +423,40 @@ Findings are asymmetric by design (Postel's law is preserved):
 - The reverse direction (consumer requests) is already covered by variant replay, so no provider-side
   request shape is needed.
 
+A provider-shape entry is matched to a consumer interaction by its description and provider states,
+or, failing that, **by operation**. An entry may carry a *selector*: shapes over request slots, such as
+a method and a path pattern, matched against the requests the consumer recorded. A provider whose shape
+comes from its types has no way to know the words a consumer team used to describe an interaction.
+Matching on them alone silently checked nothing, and the report read like reassurance
+([ADR 0025](https://github.com/rholshausen/pact-janus/blob/main/Documentation/decisions/0025-a-provider-shape-entry-may-select-interactions-by-operation.md)).
+
 Provider shape provenance, in decreasing order of fidelity:
 
 1. **Recorded from the provider's own tests**: the engine records the union of response shapes the
    provider's unit tests produce (a "provider self-contract") — highest honesty, since it is
    demonstrated, not asserted.
-2. **Derived from types**: protobuf descriptors, OpenAPI documents, or serialiser reflection, imported by a
-   content component. This is the bi-directional-contracts idea, made shape-native.
+2. **Derived from types**: protobuf descriptors, OpenAPI documents, or serialiser reflection. This is
+   the bi-directional-contracts idea, made shape-native. A shape derived from a hand-written OpenAPI
+   document found exactly what a recorded one found. One derived from an ORM-generated document found
+   4.5× as much, all of it true and almost none of it useful: one finding per nullable column
+   ([spike 7.3](https://github.com/rholshausen/pact-janus/blob/main/spikes/7.3-type-derived-shapes/FINDINGS.md)).
 3. **Authored** by the provider team.
 4. **Observed**: accumulated from responses seen across verification runs.
 
 The check runs wherever compatibility is decided: `can-i-deploy` combines verification results with the
-subsumption result. Whether a subsumption failure blocks deployment or warns is a broker policy decision
-(teams adopting incrementally will want warn-first). Providers that publish no shape simply get today's
-semantics — replay-only verification — so the mechanism is adoptable per-provider.
+subsumption result. Subsumption failures **warn by default**, for decided findings and manual reviews
+alike, and a team can raise either to block. Exemptions are scoped by field, interaction or consumer,
+require a reason, and may expire
+([ADR 0016](https://github.com/rholshausen/pact-janus/blob/main/Documentation/decisions/0016-subsumption-defaults-to-warn-with-mandatory-reason-exemptions.md)).
+Providers that publish no shape simply get today's semantics — replay-only verification — so the
+mechanism is adoptable per-provider.
+
+Where the check cannot decide, it says `unknown` and asks for review; it never guesses. Every operator
+has a comparability class. Literals, kinds, presence, unions and cardinality are decided by set
+containment. Regexes and date formats are decided on identity, against a plain string, and when the
+provider admits a finite set of values the consumer's own matcher can test; two different regexes are
+`unknown`. An operator a component contributes is `unknown` unless the two shapes are identical, or the
+component declares how to compare it.
 
 #### Components (plugins as the core design)
 
@@ -400,11 +471,22 @@ The kernel knows nothing about HTTP or JSON. It loads components implementing fo
   `produce-message`, `consume-message`, `after-verification`…).
 
 Built-in components are compiled into the engine but implement the same interfaces, so "writing a plugin"
-is documented by reading the core. Third-party components are WASM components by default (portable,
-sandboxed, no per-OS binaries); transports that need raw sockets or long-lived servers can run
-out-of-process over gRPC, which is essentially today's pact-plugins model retained as the escape hatch.
-Components are distributed as OCI artifacts and declared with versions in project config; the engine
-resolves, caches and verifies them.
+means implementing the interfaces the core uses. The prototype tested this: a third party wrote a `text/csv`
+component from the published specifications without reading engine source, and the same `.wasm` ran in a
+consumer test and in verification
+([third-party component report](https://github.com/rholshausen/pact-janus/blob/main/Documentation/third-party-component-report.md)). Third-party components are WASM
+components by default (portable, sandboxed, no per-OS binaries). Hosting them is a capability of the native
+embeddings, since a WASM-embedded engine cannot host WASM. Transports that need raw sockets or
+long-lived servers can run out-of-process, speaking the engine protocol's own stdio framing: today's
+pact-plugins *architecture*, without a second wire format. Out of process, the environment a component
+sees is enforced, and its filesystem and network grants are documented intent only. Components are
+distributed as OCI artifacts of their own type, declared in project config and pinned by digest; the
+engine resolves, caches and re-verifies them, so a pinned second run fetches nothing.
+
+Two privileges remain for the built-ins, and the design should name them. They are compiled in rather
+than loaded. And the kernel, although it knows no HTTP vocabulary, still assumes HTTP's *structure* in
+two places: parts named `request` and `response`, and a mismatch answered as a `500`. Both need to go
+before a message transport can be built.
 
 #### The executable specification
 
@@ -415,7 +497,9 @@ The Pact specification becomes three enforceable artifacts, replacing prose-plus
 3. the compatibility suite (grown from `pact-compatibility-suite`) that every SDK must pass in CI.
 
 An SDK is *conformant* when it passes the suite against a pinned engine version. Because SDKs are thin,
-conformance mostly tests DSL-to-spec translation rather than matching behaviour.
+conformance mostly tests DSL-to-spec translation rather than matching behaviour. In the prototype, both
+SDKs pass all 42 cases of one shared corpus in their own language, and the JVM SDK, written from the
+specification alone, records the same contract as the TypeScript one, member for member.
 
 #### Generated, AI-assisted SDKs
 
@@ -425,15 +509,29 @@ canonical *SDK specification* (behavioural spec plus per-language style guide) w
 mechanical regeneration when the spec changes, and language maintainers reviewing. The guarantee of
 consistency is the conformance suite, not the generation method — AI assistance lowers the maintenance
 cost, it is not load-bearing for correctness. This is how one team can plausibly keep eight SDKs current
-within one release cycle.
+within one release cycle. The prototype's two SDKs have hand-written layers of 583 lines (TypeScript)
+and 1,630 (Java), and a CI audit fails the build if matching logic creeps back in. A specification
+change was carried into both by agents that never saw each other's code, and both passed the suite
+([thinness audit](https://github.com/rholshausen/pact-janus/blob/main/Documentation/thinness-audit-report.md)).
 
-#### Pact file format v5
+#### The contract file
 
-- JSON, self-contained, broker-compatible.
+The first revision called this "Pact file format v5". The prototype names its artifact separately (a
+Janus contract), so that the Pact specification stays free to define its own next version, and the name
+is for the community to decide
+([ADR 0011](https://github.com/rholshausen/pact-janus/blob/main/Documentation/decisions/0011-contracts-as-self-identifying-json-documents.md)). "v5" below means
+that artifact, whatever it is called.
+
+- JSON, self-contained, broker-compatible: today's broker already stores, dedupes, diffs and answers
+  `can-i-deploy` for it. Provider shapes have no broker resource yet
+  ([broker integration notes](https://github.com/rholshausen/pact-janus/blob/main/Documentation/broker-integration-notes.md)).
 - Per interaction: description, provider states (typed parameters), transport binding, parts with
   **shape + exercised example variants**, component requirements (e.g. `content/protobuf >= 2`).
 - The engine reads v1–v4 and writes v5; `pact upgrade` converts v3/v4 to v5 (matching rules become shapes;
-  the single example becomes the sole variant). Downgrade is intentionally unsupported.
+  the single example becomes the sole variant), and reports every place the conversion loses or narrows
+  something. Downgrade is intentionally unsupported. A converted pact is a blunter consumer document than
+  a native one: a field with no matching rule becomes exactly the value its example held, so a pact
+  that saw `SHIPPED` records `SHIPPED`, never the values the consumer tolerates. The subsumption loop is sharper for consumers who declare their shapes.
 - Mixed fleets work through the broker: new consumers publish v5; providers need an MkII verifier to verify
   v5 pacts, but the MkII verifier also verifies all old pacts, so providers upgrade first at no cost.
 
@@ -462,23 +560,44 @@ Both are additive; no part of the core workflow depends on them.
 
 ## Drawbacks
 
+Each drawback the first revision predicted is annotated with what the prototype found
+([detail](https://github.com/rholshausen/pact-janus/blob/main/Documentation/rfc-feedback.md#4-the-drawbacks-measured)).
+
 - **This is a very large undertaking** for a volunteer-driven ecosystem: engine, protocol, format, five-plus
   SDKs, tooling, docs. Staged delivery is mandatory and even then it is multi-year.
 - **Osborne effect**: announcing MkII may stall adoption and contribution to current Pact before MkII is
-  ready. A Python-2/3-style community split is a real risk if migration is not near-mechanical.
-- **WASM host maturity varies** by language; the subprocess embedding mitigates but reintroduces process
-  management (the pain that made pact-ruby-standalone unpopular), even if per-test-run and protocol-versioned.
+  ready. A Python-2/3-style community split is a real risk if migration is not near-mechanical. *The
+  mitigation is real: the prototype's engine agrees with the pact specification's own test cases on
+  583 of 583 in scope, and verifies existing pacts unchanged.*
+- **Native binaries return.** *This replaces the first revision's "WASM host maturity varies", and it is
+  worse than predicted.* The limit was not the host languages but the WASM guest, which cannot serve a
+  mock or drive a provider. So the subprocess is the primary embedding, and per-OS `pact-engine`
+  binaries must be distributed for every SDK. That is the pain that made pact-ruby-standalone unpopular.
+  What keeps it from repeating that experience is the lifecycle: per test run, exit on stdin EOF, pinned
+  by protocol version. The prototype tested that lifecycle on Linux and on real Windows.
 - **Social cost**: pact-jvm ceasing to be an independent implementation displaces maintainer identity and
   the redundancy benefits of two implementations (bugs caught by divergence).
 - **New specified surface**: the plan grammar becomes public, versioned API; getting its stability
-  guarantees wrong would be costly.
+  guarantees wrong would be costly. *The versioning policy held under a stress test. What strained was
+  how much of a plan a component may contribute (see the plan compiler above).*
 - **Variant testing has sharp edges**: consumers' test closures must be variant-agnostic or
   variant-parameterised; careless shapes can still explode the sampled matrix; pairwise coverage is a
-  heuristic, not a proof.
+  heuristic, not a proof. *Confirmed. Whether a failing variant can be identified depends on the test
+  framework: JUnit 5 and Vitest name it for free, and a flat loop names nothing. Request-side variants
+  make the closure variant-parameterised. And the engine cannot tell whether the closure handled a
+  response, only the SDK can. Pairwise stayed small on this RFC's example: 8 variants cover 12.*
 - **Subsumption findings can overwhelm**: provider shapes derived from types tend to overstate the real
   response space (every field nullable in the ORM ≠ every field absent in practice), so a strict policy
   would drown teams in findings and teach them to rubber-stamp. Warn-first defaults and good provenance
-  guidance are essential.
+  guidance are essential. *Confirmed and measured at 4.5×, and warn-first is now the default. Converted
+  v1–v4 pacts add noise from the other direction, because they are too narrow.*
+- **A contract can say less than a v1–v4 pact said by default.** *New.* v1–v4 accept
+  `application/json; charset=utf-8` where the consumer wrote `application/json`. A shape can say that
+  only through an operator the HTTP component contributes, which does not exist yet, so an upgraded
+  contract is stricter. Stricter is the safe direction, and still wrong for the commonest header there is.
+- **Non-JSON content strains a JSON-shaped document model.** *New.* The prototype's CSV component
+  showed that the document model has no member order, that encoding an empty list loses the columns, and
+  that a component's decode errors reach the user as ordinary mismatches.
 
 ## Rationale and alternatives
 
@@ -487,7 +606,11 @@ Both are additive; no part of the core workflow depends on them.
   Retained anyway as embedding #3 — but as a transport for the one protocol, not a separate API.
 - **Shared daemon** (the ruby-standalone model): history shows the pain is process lifecycle, port
   management and version skew. MkII's subprocess mode is per-test-run, spawned by the SDK, and
-  version-pinned by the protocol — and it is the fallback, not the primary embedding.
+  version-pinned by the protocol. The first revision called it the fallback. The prototype made it the
+  primary embedding, and this lifecycle is why that is acceptable.
+- **WASM as the primary embedding** (the first revision's choice): no native binaries, sandboxed,
+  in-process. Rejected on evidence, not preference. A WASM guest has no sockets or threads, so it cannot
+  run a mock or a verification. It is kept for offline operations.
 - **Schema-based contracts** (OpenAPI/bi-directional as the core model): solves optionality by giving up
   Pact's central guarantee — that the consumer demonstrably works against what it declares. Shapes plus
   variant testing get schema-like expressiveness while keeping the guarantee.
@@ -499,24 +622,41 @@ Both are additive; no part of the core workflow depends on them.
 
 ## Unresolved questions
 
-**Through the RFC process:**
-- Naming and versioning: is this Pact specification v5 + "Pact 6" SDK majors, or a new brand (MkII)?
-- Is "everything is a component" a day-one architecture or a target (i.e. may HTTP/JSON be kernel-privileged
-  initially)?
-- IDL choice for the Engine Protocol (WIT vs protobuf vs both) and the WASM-host story per language.
-- Variant sampling defaults: is pairwise the right default? What are the caps and overrides?
-- Provider-state/variant linkage design (`whenVariant` above is a sketch).
-- Subsumption policy: should a failed check warn or block `can-i-deploy` by default, and how do teams
-  scope exemptions (per field, per interaction, per consumer)?
-- Subsumption decidability limits: comparing two regex matchers or two datetime formats for inclusion is
-  possible but expensive/fiddly — where does the check degrade to "unknown, review manually"?
-- Governance: who owns the engine, the SDK spec, and conformance sign-off? What is the funding model?
+The first revision listed twelve. The prototype answered eight, partly answered one, learned
+something about the other three, and raised three new ones. Full answers with evidence are in
+[RFC feedback](https://github.com/rholshausen/pact-janus/blob/main/Documentation/rfc-feedback.md#2-the-unresolved-questions).
 
-**Through implementation:**
-- Plan grammar stability guarantees and its versioning policy.
-- Broker/PactFlow handling of v5 artifacts (rendering shapes, diffing, matrix semantics for variants).
-- Performance envelope of WASM embeddings vs today's native FFI.
-- Message interaction hook design details (sync message RPC, broker adapters).
+**Resolved by the prototype:**
+- *Components day one, or HTTP/JSON privileged?* Day one for the interfaces. The built-ins are privileged
+  only in packaging, plus two HTTP-shaped assumptions in the kernel that are named above.
+- *IDL and WASM-host story?* JSON Schema documents over a frozen WIT pipe. The subprocess is the
+  primary embedding in every language, and WASM serves offline operations.
+- *Variant sampling defaults?* Exhaustive below a threshold, then a named deterministic pairwise
+  algorithm. Boundary variants and pins are always included, and an exceeded budget fails rather than
+  truncating.
+- *Provider-state/variant linkage?* A separate `variant-params` member resolved per variant. A state
+  the provider cannot reach is `state-unavailable`.
+- *Subsumption warn or block, and exemption scoping?* Warn by default. Exemptions are scoped by field,
+  interaction or consumer, need a reason, and may expire.
+- *Subsumption decidability?* Comparability classes per operator; `unknown` is a review, never a guess.
+- *Plan grammar stability and versioning?* Ordered grammar versions, declared by both sides, so every
+  mismatch fails by name. How much of a plan a component contributes is still open (below).
+- *Performance of WASM vs native FFI?* The engine beats `pact_ffi` on every like-for-like scenario except
+  large request bodies, and WASM is within 10–35% of native. Capability, not performance, decided the
+  embedding.
+
+**Partly resolved:**
+- *Broker handling of the new artifacts.* Contracts store in today's broker. Provider shapes need a new
+  resource, and verification results need per-consumer/provider-pair counts.
+
+**Still open:**
+- Naming and versioning, and governance and funding: for the community. The prototype frames them in its
+  staged implementation plan.
+- Message interaction hook design details (sync message RPC, broker adapters): designed, not built.
+- How a component contributes to a plan: per slot, as prototyped, or per operator, as the evidence
+  suggests.
+- The protocol operations that let the engine, not each SDK, know whether a consumer's test passed.
+- Whether an array admits the empty list by default.
 
 **Out of scope here, addressable later:**
 - Deprecation timeline for current implementations.
@@ -543,5 +683,8 @@ Both are additive; no part of the core workflow depends on them.
   fully described by pact file + verifier config + hooks.
 - **Stateful interaction sequences** (sagas, websockets, streaming): plans and transports were designed with
   multi-step exchanges in mind.
+- **A WASM engine that runs tests**: a transport the *host* provides, with an exchange loop the host drives,
+  is the one route to a WASM engine that can serve a mock. It would make the in-process, binary-free
+  embedding the first revision wanted possible again, at the cost of transport code in every SDK.
 - **Deeper AI integration**: agentic provider onboarding and mismatch triage as described above, once the
   deterministic core is stable.
