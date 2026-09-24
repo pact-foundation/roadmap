@@ -40,7 +40,9 @@ text below says what we would now build, and the first revision is in this PR's 
 change is the engine embedding: the subprocess, not WASM, is every SDK's primary embedding. Every
 unresolved question from the first revision now has an answer or a statement of what was learned; the
 detail, with links to the ADRs and measurements behind each claim, is in
-[RFC feedback](https://github.com/rholshausen/pact-janus/blob/main/Documentation/rfc-feedback.md).
+[RFC feedback](https://github.com/rholshausen/pact-janus/blob/main/Documentation/rfc-feedback.md), and a
+proposed [staged implementation plan](https://github.com/rholshausen/pact-janus/blob/main/Documentation/staged-implementation-plan.md)
+for the real build follows from it.
 
 ## Motivation
 
@@ -353,7 +355,11 @@ Design consequences:
   `convert:UTF8`, …) become specified, versioned surface. Grammar versions are ordered, the engine says
   which it reads, and anything a component contributes declares which it targets, so every mismatch
   fails by name before anything runs. Components contribute custom actions under namespaces, invoked by
-  the interpreter, rather than implementing matching end-to-end.
+  the interpreter, rather than implementing matching end-to-end. Every action is namespaced, including
+  the core ones: the families `flow`, `value`, `expect`, `check`, `match` and `legacy` are reserved for
+  the specification, so a reader of `explain` output can tell from any node's name whether the
+  specification or a component defined it
+  ([ADR 0026](https://github.com/rholshausen/pact-janus/blob/main/Documentation/decisions/0026-every-plan-action-is-namespaced-and-core-namespaces-are-reserved.md)).
 - *How much* of a plan a component contributes is open. The prototype let a content component contribute
   a whole slot's plan fragment. That works, but it makes the component a shape compiler for everything in
   the slot, and without knowing the variant: a pinned variant checked against a fragment passed where the
