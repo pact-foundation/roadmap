@@ -139,8 +139,10 @@ await pact.execute(getOrder, async (mock, variant) => {
 });
 ```
 
-The declared shape has a variant space: 3 statuses × `shippedAt` present/absent × 2 payment alternatives =
-12 variants. The engine samples this space (pairwise by default, exhaustive or explicit on request) and
+The declared shape has a variant space: 3 statuses × `shippedAt` present/absent × 2 payment alternatives ×
+2 list lengths (one item, and more than one: `eachLike`'s boundary variants) = 24 variants. The engine
+samples this space (pairwise by default, exhaustive or explicit on request; the prototype covers it with
+8) and
 runs the test closure once per selected variant, with the mock server serving that variant. If the consumer
 code blows up when `shippedAt` is absent, the test fails — *that* is what makes `optional` honest. The FAQ
 objection to optional attributes has always been "optional means untested"; in MkII, declaring a variation
@@ -498,7 +500,7 @@ The Pact specification becomes three enforceable artifacts, replacing prose-plus
 
 An SDK is *conformant* when it passes the suite against a pinned engine version. Because SDKs are thin,
 conformance mostly tests DSL-to-spec translation rather than matching behaviour. In the prototype, both
-SDKs pass all 42 cases of one shared corpus in their own language, and the JVM SDK, written from the
+SDKs pass all 47 cases of one shared corpus in their own language, and the JVM SDK, written from the
 specification alone, records the same contract as the TypeScript one, member for member.
 
 #### Generated, AI-assisted SDKs
@@ -509,8 +511,8 @@ canonical *SDK specification* (behavioural spec plus per-language style guide) w
 mechanical regeneration when the spec changes, and language maintainers reviewing. The guarantee of
 consistency is the conformance suite, not the generation method — AI assistance lowers the maintenance
 cost, it is not load-bearing for correctness. This is how one team can plausibly keep eight SDKs current
-within one release cycle. The prototype's two SDKs have hand-written layers of 583 lines (TypeScript)
-and 1,630 (Java), and a CI audit fails the build if matching logic creeps back in. A specification
+within one release cycle. The prototype's two SDKs have hand-written layers of 723 lines (TypeScript)
+and 1,802 (Java), and a CI audit fails the build if matching logic creeps back in. A specification
 change was carried into both by agents that never saw each other's code, and both passed the suite
 ([thinness audit](https://github.com/rholshausen/pact-janus/blob/main/Documentation/thinness-audit-report.md)).
 
@@ -585,7 +587,7 @@ Each drawback the first revision predicted is annotated with what the prototype 
   heuristic, not a proof. *Confirmed. Whether a failing variant can be identified depends on the test
   framework: JUnit 5 and Vitest name it for free, and a flat loop names nothing. Request-side variants
   make the closure variant-parameterised. And the engine cannot tell whether the closure handled a
-  response, only the SDK can. Pairwise stayed small on this RFC's example: 8 variants cover 12.*
+  response, only the SDK can. Pairwise stayed small on this RFC's example: 8 variants cover all 24.*
 - **Subsumption findings can overwhelm**: provider shapes derived from types tend to overstate the real
   response space (every field nullable in the ORM ≠ every field absent in practice), so a strict policy
   would drown teams in findings and teach them to rubber-stamp. Warn-first defaults and good provenance
