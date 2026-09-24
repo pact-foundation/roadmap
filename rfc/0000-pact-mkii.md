@@ -293,14 +293,17 @@ delivered over three embeddings, all speaking it identically:
 3. **Minimal C ABI** (fallback, not prototyped): three functions — create, call-with-document, free —
    carrying the same frames, for embedders that need neither of the above.
 
-The first revision made WASM the preferred embedding. The prototype showed that a WASM engine cannot run
-a consumer test or a verification in any language: a mock server needs a socket, its exchange loop needs
-a thread, and a `wasm32-wasip2` guest has neither. It also cannot host third-party components, since a
-WASM guest cannot host WASM. Performance was never the problem; capability was
+The first revision made WASM the preferred embedding. The prototype showed that its WASM engine cannot
+run a consumer test or a verification in any language: the mock's exchange loop and HTTP server run on
+threads, and a `wasm32-wasip2` guest has none. (It has sockets; the thread is the blocker.) It also
+cannot host third-party components, since a WASM guest cannot host WASM. Performance was never the problem; capability was
 ([ADR 0023](https://github.com/rholshausen/pact-janus/blob/main/Documentation/decisions/0023-the-subprocess-is-the-primary-embedding-and-wasm-serves-offline-operations.md),
 [performance report](https://github.com/rholshausen/pact-janus/blob/main/Documentation/performance-report.md)). The cost is that per-OS native binaries come back,
-distributed the way esbuild and Biome ship theirs through npm. The only route back to a WASM engine that
-runs a test is a transport the host provides, which is named and not taken.
+distributed the way esbuild and Biome ship theirs through npm. There are two routes back to a WASM
+engine that runs a test, both named and not taken: WASI 0.3 (`wasm32-wasip3`), whose component-model
+async would let the exchange loop run as a thread-free async task, and which the Rust project is
+promoting to a supported target; or a transport the host provides. The decision is to be reassessed when
+the first is available.
 
 The protocol is *coarse-grained and document-oriented*: an SDK submits a complete interaction specification
 in one call, rather than orchestrating dozens of stateful mutations. Sketch:
@@ -611,8 +614,9 @@ Each drawback the first revision predicted is annotated with what the prototype 
   version-pinned by the protocol. The first revision called it the fallback. The prototype made it the
   primary embedding, and this lifecycle is why that is acceptable.
 - **WASM as the primary embedding** (the first revision's choice): no native binaries, sandboxed,
-  in-process. Rejected on evidence, not preference. A WASM guest has no sockets or threads, so it cannot
-  run a mock or a verification. It is kept for offline operations.
+  in-process. Rejected on evidence, not preference: a `wasm32-wasip2` guest has no threads, and the
+  engine's mock runs on them, so it cannot run a mock or a verification as built. It is kept for offline
+  operations, and reassessed when WASI 0.3 lands.
 - **Schema-based contracts** (OpenAPI/bi-directional as the core model): solves optionality by giving up
   Pact's central guarantee — that the consumer demonstrably works against what it declares. Shapes plus
   variant testing get schema-like expressiveness while keeping the guarantee.
